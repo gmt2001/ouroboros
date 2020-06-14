@@ -38,22 +38,6 @@ or via `docker-compose`:
 
 [Official Example](docker-compose.yml)
 
-### Pip
-
-Ouroboros can also be installed via `pip`:
-
-```bash
-pip install ouroboros-cli
-```
-
-And can then be invoked using the `ouroboros` command:
-
-```bash
-$ ouroboros --interval 300 --log-level debug
-```
-
-> This can be useful if you would like to create a `systemd` service or similar daemon that doesn't run in a container
-
 ## Examples
 Per-command and scenario examples can be found in the [wiki](https://github.com/pyouroboros/ouroboros/wiki/Usage)
 

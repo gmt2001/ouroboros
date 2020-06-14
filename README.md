@@ -1,13 +1,5 @@
-⚠️⚠️⚠️ ouroboros is no longer in development. It does its job (more or less) and the devs have succumb to real life! Please feel free to fork and maintain as you wish. We appreciate all of the support in the last year :) ⚠️⚠️⚠️
-<img width="800" src="https://raw.githubusercontent.com/pyouroboros/ouroboros/master/assets/ouroboros_logo_primary_long_cropped.jpg" alt="Ouroboros Logo">
 
-[![Discord](https://img.shields.io/discord/532695326117593112.svg?colorB=7289DA&label=Discord&logo=Discord&logoColor=7289DA&style=flat-square)](https://discord.gg/qHNByUW)
-[![BuyUsCoffee](https://img.shields.io/badge/BuyMeACoffee-Donate-ff813f.svg?logo=CoffeeScript&style=flat-square)](https://www.buymeacoffee.com/caleblemoine)  
-[![pipeline status](https://gitlab.com/pyouroboros/ouroboros/badges/master/pipeline.svg)](https://gitlab.com/pyouroboros/ouroboros/commits/master)
-[![Release](https://img.shields.io/github/release/pyouroboros/ouroboros.svg?style=flat-square)](https://hub.docker.com/r/pyouroboros/ouroboros/)
-[![Python Version](https://img.shields.io/pypi/pyversions/ouroboros-cli.svg?style=flat-square)](https://pypi.org/project/ouroboros-cli/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/pyouroboros/ouroboros.svg?style=flat-square)](https://hub.docker.com/r/pyouroboros/ouroboros/)
-[![Layers](https://images.microbadger.com/badges/image/pyouroboros/ouroboros.svg)](https://microbadger.com/images/pyouroboros/ouroboros)  
+<img width="800" src="https://raw.githubusercontent.com/pyouroboros/ouroboros/master/assets/ouroboros_logo_primary_long_cropped.jpg" alt="Ouroboros Logo">
 
 Automatically update your running Docker containers to the latest available image.
 
@@ -26,7 +18,7 @@ Ouroboros will monitor (all or specified) running docker containers and update t
 
 ## Getting Started
 
-More detailed usage and configuration can be found on [the wiki](https://github.com/pyouroboros/ouroboros/wiki).
+More detailed usage and configuration can be found on [the wiki](../../wikis/home).
 
 ### Docker
 
@@ -42,7 +34,7 @@ docker run -d --name ouroboros \
 
 or via `docker-compose`:
 
-[Official Example](https://github.com/pyouroboros/ouroboros/blob/master/docker-compose.yml)
+[Official Example](docker-compose.yml)
 
 ### Pip
 
@@ -61,7 +53,7 @@ $ ouroboros --interval 300 --log-level debug
 > This can be useful if you would like to create a `systemd` service or similar daemon that doesn't run in a container
 
 ## Examples
-Per-command and scenario examples can be found in the [wiki](https://github.com/pyouroboros/ouroboros/wiki/Usage)
+Per-command and scenario examples can be found in the [wiki](../../wikis/Usage)
 
 ## Contributing
 

@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.5.0](https://github.com/russandol/ouroboros/tree/v1.5.0) (2020-06-11)
+[Full Changelog](https://github.com/russandol/ouroboros/compare/1.5.0...v1.4.3)
+
+**Implemented enhancements:**
+
+- Added Monitor only capacity
+
 ## [1.4.3](https://github.com/pyouroboros/ouroboros/tree/1.4.3) (2019-12-11)
 [Full Changelog](https://github.com/pyouroboros/ouroboros/compare/1.4.3...1.4.2)
 

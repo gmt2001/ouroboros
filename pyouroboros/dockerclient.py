@@ -313,6 +313,17 @@ class Container(BaseImageObject):
                     self.logger.info('dry run : %s would be updated', container.name)
                 continue
 
+            if self.config.monitor_only:
+                # Ugly hack for repo digest
+                repo_digest_id = current_image.attrs['RepoDigests'][0].split('@')[1]
+                if repo_digest_id != latest_image.id:
+                    self.notification_manager.send(
+                        container_tuples=[(container.name, current_image, latest_image)],
+                        socket=self.socket,
+                        kind='monitor'
+                    )
+                continue
+
             if container.name in ['ouroboros', 'ouroboros-updated']:
                 self.data_manager.total_updated[self.socket] += 1
                 self.data_manager.add(label=container.name, socket=self.socket)
@@ -437,6 +448,16 @@ class Service(BaseImageObject):
                 if self.config.dry_run:
                     # Ugly hack for repo digest
                     self.logger.info('dry run : %s would be updated', service.name)
+                    continue
+
+                if self.config.monitor_only:
+                    # Ugly hack for repo digest
+                    self.notification_manager.send(
+                        container_tuples=[(service, sha256[-10], latest_image)],
+                        socket=self.socket,
+                        kind='monitor',
+                        mode='service'
+                    )
                     continue
 
                 updated_service_tuples.append(

@@ -59,6 +59,9 @@ def main():
     core_group.add_argument('-A', '--dry-run', default=Config.dry_run, action='store_true', dest='DRY_RUN',
                             help='Run without making changes. Best used with run-once')
 
+    core_group.add_argument('--monitor-only', default=Config.monitor_only, action='store_true', dest='MONITOR_ONLY',
+                            help='Run without making changes. Best used with run-once')
+
     core_group.add_argument('-N', '--notifiers', nargs='+', default=Config.notifiers, dest='NOTIFIERS',
                             help='Apprise formatted notifiers\n'
                                  'EXAMPLE: -N discord://1234123412341234/jasdfasdfasdfasddfasdf '

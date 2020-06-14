@@ -1,0 +1,55 @@
+name: Build
+
+on:
+  release:
+    types: [published]
+
+env:
+    OUROBOROS_VERSION: 1.5.1
+
+jobs:
+  build:
+    name: Docker Build on ubuntu-latest
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check Credentials
+      id: check_credentials
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_CLITOKEN: ${{ secrets.DOCKER_CLITOKEN }}
+      run: |
+        if [ "${DOCKER_USER}" == "" ]; then
+          echo "Missing User"
+          echo "##[set-output name=missingsecrets;]$(echo yes)"
+        elif [ "${DOCKER_CLITOKEN}" == "" ]; then
+          echo "Missing Cli Token"
+          echo "##[set-output name=missingsecrets;]$(echo yes)"
+        else
+          echo "All secrets present"
+          echo "##[set-output name=missingsecrets;]$(echo no)"
+        fi
+    - name: Checkout Repository
+      if: contains(steps.check_credentials.outputs.missingsecrets, 'no')
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+    - name: Set up Docker Buildx
+      if: contains(steps.check_credentials.outputs.missingsecrets, 'no')
+      uses: crazy-max/ghaction-docker-buildx@v1
+      with:
+        buildx-version: latest
+        qemu-version: latest
+    - name: Login to DockerHub Registry
+      if: contains(steps.check_credentials.outputs.missingsecrets, 'no')
+      run: echo ${{ secrets.DOCKER_CLITOKEN }} | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
+    - name: Build and Push Docker
+      if: contains(steps.check_credentials.outputs.missingsecrets, 'no')
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+      run: |
+        if [[ $(curl -s -I "https://registry.hub.docker.com/v2/repositories/${DOCKER_USER}/ouroboros/tags/${OUROBOROS_VERSION}/" | head -n 1 | cut  -d$' ' -f2) = "200" ]]; then
+          echo Build already published, skipping...
+          exit 0
+        fi
+        docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --file Dockerfile -t ${DOCKER_USER}/ouroboros:${OUROBOROS_VERSION} --push .
+        docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --file Dockerfile -t ${DOCKER_USER}/ouroboros:latest --push .

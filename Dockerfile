@@ -1,6 +1,4 @@
-FROM amd64/python:3.7.2-alpine
-
-LABEL maintainers="oredin"
+FROM python:3.7.2-alpine
 
 ENV TZ UTC
 

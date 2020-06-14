@@ -1,9 +1,11 @@
 
-<img width="800" src="https://raw.githubusercontent.com/pyouroboros/ouroboros/master/assets/ouroboros_logo_primary_long_cropped.jpg" alt="Ouroboros Logo">
+<img width="800" src="https://raw.githubusercontent.com/gmt2001/ouroboros/master/assets/ouroboros_logo_primary_long_cropped.jpg" alt="Ouroboros Logo">
 
 Automatically update your running Docker containers to the latest available image.
 
 The de-facto standard for docker update automation
+
+Forked from the original at https://github.com/pyouroboros/ouroboros/
 
 ## Overview
 
@@ -18,7 +20,7 @@ Ouroboros will monitor (all or specified) running docker containers and update t
 
 ## Getting Started
 
-More detailed usage and configuration can be found on [the wiki](../../wikis/home).
+More detailed usage and configuration can be found on [the wiki](https://github.com/pyouroboros/ouroboros/wiki).
 
 ### Docker
 
@@ -27,10 +29,10 @@ Ouroboros is deployed via docker image like so:
 ```bash
 docker run -d --name ouroboros \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  pyouroboros/ouroboros
+  gmt2001/ouroboros
 ```
 
-> This is image is compatible for amd64, arm32, and arm64 CPU architectures
+> This is image is compatible for amd64, arm64, and arm/v7 CPU architectures
 
 or via `docker-compose`:
 
@@ -53,7 +55,7 @@ $ ouroboros --interval 300 --log-level debug
 > This can be useful if you would like to create a `systemd` service or similar daemon that doesn't run in a container
 
 ## Examples
-Per-command and scenario examples can be found in the [wiki](../../wikis/Usage)
+Per-command and scenario examples can be found in the [wiki](https://github.com/pyouroboros/ouroboros/wiki/Usage)
 
 ## Contributing
 

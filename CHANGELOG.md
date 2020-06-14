@@ -1,11 +1,18 @@
 # Change Log
 
-## [v1.5.0](https://github.com/russandol/ouroboros/tree/v1.5.0) (2020-06-11)
-[Full Changelog](https://github.com/russandol/ouroboros/compare/1.5.0...v1.4.3)
+## [v1.5.1](https://github.com/gmt2001/ouroboros/tree/v1.5.1) (2020-06-11)
+[Full Changelog](https://github.com/gmt2001/ouroboros/compare/1.5.1...v1.4.3)
 
 **Implemented enhancements:**
 
-- Added Monitor only capacity
+- Added Monitor only capacity [\#4](https://github.com/gmt2001/ouroboros/pull/4) ([RUSSANDOL](https://github.com/russandol-sarl))
+- Switched GitHub Actions build chain
+
+**Fixed bugs:**
+
+- Let Apprise know that emails are sent as text, not HTML [\#3](https://github.com/gmt2001/ouroboros/pull/3) ([Felix Engelmann](https://github.com/felix-engelmann))
+- Added patch as images in gitlab registrys dont have @sha256: part of the image therefore it needs to be pulled from the image name 'RepoDigests" [\#2](https://github.com/gmt2001/ouroboros/pull/2) ([samson4649](https://github.com/samson4649))
+- Apprise - Fix Slack issue - Token B limited to 8 characters [\#1](https://github.com/gmt2001/ouroboros/pull/1) ([Mdleal](https://github.com/Mdleal))
 
 ## [1.4.3](https://github.com/pyouroboros/ouroboros/tree/1.4.3) (2019-12-11)
 [Full Changelog](https://github.com/pyouroboros/ouroboros/compare/1.4.3...1.4.2)

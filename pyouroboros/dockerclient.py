@@ -198,7 +198,17 @@ class Container(BaseImageObject):
                             else:
                                 running_containers.append(container)
                     except IndexError:
-                        self.logger.error("%s has no tags.. you should clean it up! Ignoring.", container.id)
+                        # portainer_agent.xxxxxxxxxxx.yyyyyyyy
+                        checklist = [
+                            container.name, container.name.split('.')[0],
+                            container.id, container.short_id
+                        ]
+
+                        ignore = filter(lambda e: e in self.config.ignore, checklist)
+                        if ignore:
+                            continue
+
+                        self.logger.warn("%s has no tags.. you should clean it up! Ignoring.", container.id)
                         continue
 
         except DockerException:

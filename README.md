@@ -1,5 +1,5 @@
 
-<img width="800" src="https://raw.githubusercontent.com/gmt2001/ouroboros/master/assets/ouroboros_logo_primary_long_cropped.jpg" alt="Ouroboros Logo">
+<img width="800" src="https://raw.githubusercontent.com/gmt2001/ouroboros/main/assets/ouroboros_logo_primary_long_cropped.jpg" alt="Ouroboros Logo">
 
 Automatically update your running Docker containers to the latest available image.
 
@@ -20,7 +20,7 @@ Ouroboros will monitor (all or specified) running docker containers and update t
 
 ## Getting Started
 
-More detailed usage and configuration can be found on [the wiki](https://github.com/pyouroboros/ouroboros/wiki).
+More detailed usage and configuration can be found on [the wiki](https://github.com/gmt2001/ouroboros/wiki).
 
 ### Docker
 
@@ -39,7 +39,7 @@ or via `docker-compose`:
 [Official Example](docker-compose.yml)
 
 ## Examples
-Per-command and scenario examples can be found in the [wiki](https://github.com/pyouroboros/ouroboros/wiki/Usage)
+Per-command and scenario examples can be found in the [wiki](https://github.com/gmt2001/ouroboros/wiki/Usage)
 
 ## Contributing
 

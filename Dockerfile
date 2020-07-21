@@ -13,4 +13,8 @@ COPY /pyouroboros /app/pyouroboros
 
 RUN pip install --no-cache-dir .
 
+RUN mkdir /app/pyouroboros/hooks
+
+VOLUME /app/pyouroboros/hooks
+
 ENTRYPOINT ["ouroboros"]

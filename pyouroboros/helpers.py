@@ -1,3 +1,30 @@
+from inspect import getframeinfo, currentframe
+from os.path import dirname, abspath
+from pathlib import Path
+
+def get_exec_dir():
+    filename = getframeinfo(currentframe()).filename
+    path = dirname(abspath(filename))
+    if path.endswith('/'):
+        path = path[:-1]
+    return path
+
+def run_hook(hookname, globals=None, locals=None):
+    pathlist = Path(get_exec_dir() + '/hooks/' + hookname).rglob('*.py')
+    for path in pathlist:
+        execfile(str(path), globals, locals)
+
+# Copied from https://stackoverflow.com/a/41658338
+def execfile(filepath, globals=None, locals=None):
+    if globals is None:
+        globals = {}
+    globals.update({
+        "__file__": filepath,
+        "__name__": "__main__",
+    })
+    with open(filepath, 'rb') as file:
+        exec(compile(file.read(), filepath, 'exec'), globals, locals)
+
 def set_properties(old, new, self_name=None):
     """Store object for spawning new container in place of the one with outdated image"""
     properties = {

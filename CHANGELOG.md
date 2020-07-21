@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.6.0](https://github.com/gmt2001/ouroboros/tree/v1.6.0) (2020-06-11)
+[Full Changelog](https://github.com/gmt2001/ouroboros/compare/1.6.0...v1.5.1)
+
+**Implemented enhancements:**
+
+- Added hooks system
+
 ## [v1.5.1](https://github.com/gmt2001/ouroboros/tree/v1.5.1) (2020-06-11)
 [Full Changelog](https://github.com/gmt2001/ouroboros/compare/1.5.1...v1.4.3)
 

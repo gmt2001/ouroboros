@@ -8,7 +8,8 @@ class Config(object):
                'PROMETHEUS_PORT', 'NOTIFIERS', 'REPO_USER', 'REPO_PASS', 'CLEANUP', 'RUN_ONCE', 'CRON',
                'INFLUX_URL', 'INFLUX_PORT', 'INFLUX_USERNAME', 'INFLUX_PASSWORD', 'INFLUX_DATABASE', 'INFLUX_SSL',
                'INFLUX_VERIFY_SSL', 'DATA_EXPORT', 'SELF_UPDATE', 'LABEL_ENABLE', 'DOCKER_TLS', 'LABELS_ONLY',
-               'DRY_RUN', 'MONITOR_ONLY', 'HOSTNAME', 'DOCKER_TLS_VERIFY', 'SWARM', 'SKIP_STARTUP_NOTIFICATIONS']
+               'DRY_RUN', 'MONITOR_ONLY', 'HOSTNAME', 'DOCKER_TLS_VERIFY', 'SWARM', 'SKIP_STARTUP_NOTIFICATIONS',
+               'CLEANUP_UNUSED_VOLUMES']
 
     hostname = environ.get('HOSTNAME')
     interval = 300
@@ -22,6 +23,7 @@ class Config(object):
     data_export = None
     log_level = 'info'
     cleanup = False
+    cleanup_unused_volumes = False
     run_once = False
     dry_run = False
     monitor_only = False
@@ -94,7 +96,7 @@ class Config(object):
                         print(e)
                 elif option in ['CLEANUP', 'RUN_ONCE', 'INFLUX_SSL', 'INFLUX_VERIFY_SSL', 'DRY_RUN', 'MONITOR_ONLY', 'SWARM',
                                 'SELF_UPDATE', 'LABEL_ENABLE', 'DOCKER_TLS', 'LABELS_ONLY', 'DOCKER_TLS_VERIFY',
-                                'SKIP_STARTUP_NOTIFICATIONS']:
+                                'SKIP_STARTUP_NOTIFICATIONS', 'CLEANUP_UNUSED_VOLUMES']:
                     if env_opt.lower() in ['true', 'yes']:
                         setattr(self, option.lower(), True)
                     elif env_opt.lower() in ['false', 'no']:

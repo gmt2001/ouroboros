@@ -6,6 +6,7 @@
 **Implemented enhancements:**
 
 - Added hooks system
+- Added option to cleanup unused volumes [\#6](https://github.com/gmt2001/ouroboros/pull/6) ([MENTAL](https://github.com/thisis-mental))
 
 ## [v1.5.1](https://github.com/gmt2001/ouroboros/tree/v1.5.1) (2020-06-11)
 [Full Changelog](https://github.com/gmt2001/ouroboros/compare/1.5.1...v1.4.3)

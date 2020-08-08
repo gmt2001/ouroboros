@@ -372,6 +372,13 @@ class Container(BaseImageObject):
                     self.client.images.remove(current_image.id)
                 except APIError as e:
                     self.logger.error("Could not delete old image for %s, Error: %s", container.name, e)
+            
+            if self.config.cleanup_unused_volumes:
+                    try:
+                        self.docker.client.volumes.prune()
+                    except APIError as e:
+                        self.logger.error("Could not delete unused volume for %s, Error: %s", container.name, e)
+            
             updated_count += 1
 
             self.logger.debug("Incrementing total container updated count")

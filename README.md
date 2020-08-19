@@ -32,7 +32,7 @@ docker run -d --name ouroboros \
   gmt2001/ouroboros
 ```
 
-> This is image is compatible for amd64, arm64, and arm/v7 CPU architectures
+> This image is compatible with amd64, arm64, and arm/v7 CPU architectures
 
 or via `docker-compose`:
 

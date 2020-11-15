@@ -38,7 +38,7 @@ jobs:
       if: contains(steps.check_credentials.outputs.missingsecrets, 'no')
       uses: docker/setup-qemu-action@v1
       with:
-        platforms: amd64,arm64,arm/v7
+        platforms: amd64,arm64,arm
     - name: Set up Docker Buildx
       if: contains(steps.check_credentials.outputs.missingsecrets, 'no')
       uses: docker/setup-buildx-action@v1
@@ -51,6 +51,11 @@ jobs:
         username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_CLITOKEN }}
         logout: true
+    - name: Update Version String
+        if: contains(steps.check_credentials.outputs.missingsecrets, 'no')
+        run: |
+          sed -i -r 's/VERSION = "custom"/VERSION = "$OUROBOROS_VERSION"/' pyouroboros/__init__.py
+          echo $?\
     - name: Build and Push Docker
       if: contains(steps.check_credentials.outputs.missingsecrets, 'no')
       uses: docker/build-push-action@v2
@@ -60,5 +65,5 @@ jobs:
         platforms: linux/amd64,linux/arm64,linux/arm/v7
         push: true
         tags: |
-          ${{ secrets.DOCKER_USER }}/ouroboros:${OUROBOROS_VERSION}
+          ${{ secrets.DOCKER_USER }}/ouroboros:${{ env.OUROBOROS_VERSION }}
           ${{ secrets.DOCKER_USER }}/ouroboros:latest

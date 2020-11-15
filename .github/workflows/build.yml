@@ -3,9 +3,10 @@ name: Build
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 env:
-    OUROBOROS_VERSION: 1.6.0
+    OUROBOROS_VERSION: 1.7.0
 
 jobs:
   build:

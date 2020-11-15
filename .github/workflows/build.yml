@@ -52,10 +52,10 @@ jobs:
         password: ${{ secrets.DOCKER_CLITOKEN }}
         logout: true
     - name: Update Version String
-        if: contains(steps.check_credentials.outputs.missingsecrets, 'no')
-        run: |
-          sed -i -r 's/VERSION = "custom"/VERSION = "$OUROBOROS_VERSION"/' pyouroboros/__init__.py
-          echo $?\
+      if: contains(steps.check_credentials.outputs.missingsecrets, 'no')
+      run: |
+        sed -i -r 's/VERSION = "custom"/VERSION = "$OUROBOROS_VERSION"/' pyouroboros/__init__.py
+        echo $?\
     - name: Build and Push Docker
       if: contains(steps.check_credentials.outputs.missingsecrets, 'no')
       uses: docker/build-push-action@v2

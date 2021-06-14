@@ -6,8 +6,6 @@ WORKDIR /app
 
 COPY /requirements.txt /setup.py /ouroboros /README.md /app/
 
-RUN apk add --no-cache tzdata
-
 RUN pip install --upgrade pip
 
 RUN pip install --upgrade setuptools

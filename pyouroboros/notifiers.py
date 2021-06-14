@@ -2,8 +2,9 @@ import apprise
 import gettext
 
 from logging import getLogger
-from datetime import datetime, timezone
-
+from datetime import datetime
+from Babel import format_datetime
+from pytz import timezone
 
 class NotificationManager(object):
     def __init__(self, config, data_manager):
@@ -44,12 +45,12 @@ class NotificationManager(object):
 
     def send(self, container_tuples=None, socket=None, kind='update', next_run=None, mode='container'):
         if kind == 'startup':
-            now = datetime.now(timezone.utc).astimezone()
+            now = datetime.now(timezone('UTC')).astimezone()
             title = _('Ouroboros has started')
             body_fields = [
                 _('Host: %s') % self.config.hostname,
-                _('Time: %s') % now.strftime(_("%Y-%m-%d %H:%M:%S")),
-                _('Next Run: %s') % next_run]
+                _('Time: %s') % format_datetime(None, format='full', tzinfo=timezone(self.config.tz), locale=self.config.language),
+                _('Next Run: %s') % format_datetime(next_run, format='full', tzinfo=timezone(self.config.tz), locale=self.config.language)]
         elif kind == 'monitor':
             title = _('Ouroboros has detected updates!')
             body_fields = [

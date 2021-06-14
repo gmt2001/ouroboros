@@ -15,39 +15,35 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: pyouroboros/ouroboros.py:158
+#: pyouroboros/ouroboros.py:165
 msgid "Version: %s-%s"
 msgstr ""
 
-#: pyouroboros/ouroboros.py:161
+#: pyouroboros/ouroboros.py:168
 msgid "Ouroboros configuration: %s"
 msgstr ""
 
-#: pyouroboros/ouroboros.py:177
+#: pyouroboros/ouroboros.py:184
 msgid "Run Once container update for %s"
 msgstr ""
 
-#: pyouroboros/ouroboros.py:180
+#: pyouroboros/ouroboros.py:187
 msgid "Self Check for %s"
 msgstr ""
 
-#: pyouroboros/ouroboros.py:184
+#: pyouroboros/ouroboros.py:191
 msgid "Cron container update for %s"
 msgstr ""
 
-#: pyouroboros/ouroboros.py:196
+#: pyouroboros/ouroboros.py:203
 msgid "Initial run interval container update for %s"
 msgstr ""
 
-#: pyouroboros/ouroboros.py:200
+#: pyouroboros/ouroboros.py:207
 msgid "Interval container update for %s"
 msgstr ""
 
-#: pyouroboros/ouroboros.py:204
+#: pyouroboros/ouroboros.py:211
 msgid "Could not connect to socket %s. Check your config"
-msgstr ""
-
-#: pyouroboros/ouroboros.py:212
-msgid "%Y-%m-%d %H:%M:%S"
 msgstr ""
 

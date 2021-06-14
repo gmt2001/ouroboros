@@ -15,55 +15,51 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 
 
-#: pyouroboros/notifiers.py:41
+#: pyouroboros/notifiers.py:42
 msgid "Could not add notifier %s"
 msgstr ""
 
-#: pyouroboros/notifiers.py:48
+#: pyouroboros/notifiers.py:49
 msgid "Ouroboros has started"
 msgstr ""
 
-#: pyouroboros/notifiers.py:50
+#: pyouroboros/notifiers.py:51
 msgid "Host: %s"
 msgstr ""
 
-#: pyouroboros/notifiers.py:51
-msgid "%Y-%m-%d %H:%M:%S"
-msgstr ""
-
-#: pyouroboros/notifiers.py:51
+#: pyouroboros/notifiers.py:52
 msgid "Time: %s"
 msgstr ""
 
-#: pyouroboros/notifiers.py:52
+#: pyouroboros/notifiers.py:53
 msgid "Next Run: %s"
 msgstr ""
 
-#: pyouroboros/notifiers.py:54
+#: pyouroboros/notifiers.py:55
 msgid "Ouroboros has detected updates!"
 msgstr ""
 
-#: pyouroboros/notifiers.py:56
+#: pyouroboros/notifiers.py:57
 msgid "Host/Socket: %s / %s"
 msgstr ""
 
-#: pyouroboros/notifiers.py:57
+#: pyouroboros/notifiers.py:58
 msgid "Containers Monitored: %d"
 msgstr ""
 
-#: pyouroboros/notifiers.py:58
+#: pyouroboros/notifiers.py:59
 msgid "Total Containers Updated: %d"
 msgstr ""
 
-#: pyouroboros/notifiers.py:62
+#: pyouroboros/notifiers.py:63
 msgid "{} updated from {} to {}"
 msgstr ""
 
-#: pyouroboros/notifiers.py:70
+#: pyouroboros/notifiers.py:71
 msgid "Ouroboros has updated containers!"
 msgstr ""
 
-#: pyouroboros/notifiers.py:75
+#: pyouroboros/notifiers.py:76
 msgid "Containers updated this pass: %d"
 msgstr ""
 

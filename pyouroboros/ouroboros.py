@@ -4,9 +4,10 @@ from time import sleep
 from os import environ
 
 from requests.exceptions import ConnectionError
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta
 from argparse import ArgumentParser, RawTextHelpFormatter
 from apscheduler.schedulers.background import BackgroundScheduler
+from pytz import timezone
 
 from pyouroboros.config import Config
 from pyouroboros import VERSION, BRANCH
@@ -71,6 +72,9 @@ def main():
 
     core_group.add_argument('-la', '--language', nargs='+', default=Config.language, dest='LANGUAGE',
                             help='Set the language of the translation\nDEFAULT: en')
+
+    core_group.add_argument('-tz', '--timezone', nargs='+', default=Config.tz, dest='TZ',
+                            help='Set the timezone of notifications\nDEFAULT: UTC')
 
     docker_group = parser.add_argument_group("Docker", "Configuration of docker functionality")
     docker_group.add_argument('-m', '--monitor', nargs='+', default=Config.monitor, dest='MONITOR',
@@ -211,8 +215,8 @@ def main():
     elif config.cron:
         next_run = scheduler.get_jobs()[0].next_run_time
     else:
-        now = datetime.now(timezone.utc).astimezone()
-        next_run = (now + timedelta(0, config.interval)).strftime(_("%Y-%m-%d %H:%M:%S"))
+        now = datetime.now(timezone('UTC')).astimezone()
+        next_run = (now + timedelta(0, config.interval))
 
     if not config.skip_startup_notifications:
         notification_manager.send(kind='startup', next_run=next_run)

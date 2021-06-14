@@ -1,5 +1,21 @@
 # Change Log
 
+## [v1.8.0](https://github.com/gmt2001/ouroboros/tree/v1.8.0) (2021-06-14)
+[Full Changelog](https://github.com/gmt2001/ouroboros/compare/1.8.0...v1.7.0)
+
+**Implemented enhancements:**
+
+- Added the ability to translate the notifications sent out via apprise [\#28](https://github.com/gmt2001/ouroboros/pull/28) ([TaixMiguel](https://github.com/TaixMiguel))
+
+## [v1.7.0](https://github.com/gmt2001/ouroboros/tree/v1.7.0) (2020-11-15)
+[Full Changelog](https://github.com/gmt2001/ouroboros/compare/1.7.0...v1.6.0)
+
+**Fixed bugs:**
+
+- Bump Apprise to v0.8.5, which fixes the slack Token B limit issue [pyouroboros#385](https://github.com/pyouroboros/ouroboros/pull/385) ([Mdleal](https://github.com/Mdleal))
+- Fixed issue where multiple containers which are on different tags that point to the same image id would be updated, when only one tag actually had an update available [pyouroboros#393](https://github.com/pyouroboros/ouroboros/pull/393) ([koreno](https://github.com/koreno))
+- Fixed issue where multiple containers which are on different tags could end up all switching to the updated tag unintentionally [\pyouroboros#395](https://github.com/pyouroboros/ouroboros/pull/395) ([koreno](https://github.com/koreno))
+
 ## [v1.6.0](https://github.com/gmt2001/ouroboros/tree/v1.6.0) (2020-06-11)
 [Full Changelog](https://github.com/gmt2001/ouroboros/compare/1.6.0...v1.5.1)
 

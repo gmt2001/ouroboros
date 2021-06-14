@@ -11,6 +11,8 @@ RUN apk add --no-cache tzdata && \
 
 COPY /pyouroboros /app/pyouroboros
 
+COPY /locales /app/locales
+
 RUN pip install --no-cache-dir .
 
 RUN mkdir /app/pyouroboros/hooks

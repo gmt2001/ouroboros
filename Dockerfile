@@ -1,4 +1,4 @@
-FROM python:3.9.5-alpine
+FROM python:3.9-alpine
 
 ENV TZ UTC
 
@@ -6,8 +6,13 @@ WORKDIR /app
 
 COPY /requirements.txt /setup.py /ouroboros /README.md /app/
 
-RUN apk add --no-cache tzdata && \
-    pip install --no-cache-dir -r requirements.txt
+RUN apk add --no-cache tzdata
+
+RUN pip install --upgrade pip
+
+RUN pip install --upgrade setuptools
+
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY /pyouroboros /app/pyouroboros
 

@@ -8,7 +8,7 @@ COPY /requirements.txt /setup.py /ouroboros /README.md /app/
 
 RUN apk update && apk upgrade
 
-RUN apk add --no-cache --virtual .build-deps gcc build-base linux-headers ca-certificates python3-dev libffi-dev libressl-dev
+RUN apk add --no-cache --virtual .build-deps gcc build-base linux-headers ca-certificates python3-dev libffi-dev libressl-dev cargo
 
 RUN pip install --upgrade pip \
     && pip install --upgrade setuptools \

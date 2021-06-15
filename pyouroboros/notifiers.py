@@ -3,7 +3,7 @@ import gettext
 
 from logging import getLogger
 from datetime import datetime
-from babel import format_datetime
+from babel import dates
 from pytz import timezone
 
 class NotificationManager(object):
@@ -49,8 +49,8 @@ class NotificationManager(object):
             title = _('Ouroboros has started')
             body_fields = [
                 _('Host: %s') % self.config.hostname,
-                _('Time: %s') % format_datetime(None, format='full', tzinfo=timezone(self.config.tz), locale=self.config.language),
-                _('Next Run: %s') % format_datetime(next_run, format='full', tzinfo=timezone(self.config.tz), locale=self.config.language)]
+                _('Time: %s') % dates.format_datetime(None, format='full', tzinfo=timezone(self.config.tz), locale=self.config.language),
+                _('Next Run: %s') % dates.format_datetime(next_run, format='full', tzinfo=timezone(self.config.tz), locale=self.config.language)]
         elif kind == 'monitor':
             title = _('Ouroboros has detected updates!')
             body_fields = [

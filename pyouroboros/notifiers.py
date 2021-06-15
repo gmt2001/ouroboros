@@ -3,7 +3,7 @@ import gettext
 
 from logging import getLogger
 from datetime import datetime
-from Babel import format_datetime
+from babel import format_datetime
 from pytz import timezone
 
 class NotificationManager(object):

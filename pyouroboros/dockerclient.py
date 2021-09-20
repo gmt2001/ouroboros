@@ -45,12 +45,12 @@ class Docker(object):
                     verify=cert_paths['cert_files']['ca_crt'] if self.config.docker_tls_verify else False,
                     client_cert=(cert_paths['cert_files']['client_cert'], cert_paths['cert_files']['client_key'])
                 )
-                client = DockerClient(base_url=self.socket, tls=tls_config)
+                client = DockerClient(base_url=self.socket, tls=tls_config, timeout=self.config.docker_timeout)
             except ValueError:
                 self.logger.error('Invalid Docker TLS config for %s, reverting to unsecured', self.socket)
-                client = DockerClient(base_url=self.socket)
+                client = DockerClient(base_url=self.socket, timeout=self.config.docker_timeout)
         else:
-            client = DockerClient(base_url=self.socket)
+            client = DockerClient(base_url=self.socket, timeout=self.config.docker_timeout)
 
         return client
 

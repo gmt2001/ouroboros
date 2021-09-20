@@ -9,7 +9,7 @@ class Config(object):
                'INFLUX_URL', 'INFLUX_PORT', 'INFLUX_USERNAME', 'INFLUX_PASSWORD', 'INFLUX_DATABASE', 'INFLUX_SSL',
                'INFLUX_VERIFY_SSL', 'DATA_EXPORT', 'SELF_UPDATE', 'LABEL_ENABLE', 'DOCKER_TLS', 'LABELS_ONLY',
                'DRY_RUN', 'MONITOR_ONLY', 'HOSTNAME', 'DOCKER_TLS_VERIFY', 'SWARM', 'SKIP_STARTUP_NOTIFICATIONS', 'LANGUAGE',
-               'TZ', 'CLEANUP_UNUSED_VOLUMES']
+               'TZ', 'CLEANUP_UNUSED_VOLUMES', 'DOCKER_TIMEOUT']
 
     hostname = environ.get('HOSTNAME')
     interval = 300
@@ -17,6 +17,7 @@ class Config(object):
     docker_sockets = 'unix://var/run/docker.sock'
     docker_tls = False
     docker_tls_verify = True
+    docker_timeout = 60
     swarm = False
     monitor = []
     ignore = []
@@ -90,7 +91,7 @@ class Config(object):
                 if isinstance(env_opt, str):
                     # Clean out quotes, both single/double and whitespace
                     env_opt = env_opt.strip("'").strip('"').strip(' ')
-                if option in ['INTERVAL', 'PROMETHEUS_PORT', 'INFLUX_PORT']:
+                if option in ['INTERVAL', 'PROMETHEUS_PORT', 'INFLUX_PORT', 'DOCKER_TIMEOUT']:
                     try:
                         opt = int(env_opt)
                         setattr(self, option.lower(), opt)

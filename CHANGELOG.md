@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.9.0](https://github.com/gmt2001/ouroboros/tree/v1.9.0) (2021-09-20)
+[Full Changelog](https://github.com/gmt2001/ouroboros/compare/1.9.0...v1.8.0)
+
+**Implemented enhancements:**
+
+- Added the ability to change the Docker client timeout via DOCKER_TIMEOUT environment variable [\#33](https://github.com/gmt2001/ouroboros/pull/33) ([gkovelman](https://github.com/gkovelman))
+
 ## [v1.8.0](https://github.com/gmt2001/ouroboros/tree/v1.8.0) (2021-06-14)
 [Full Changelog](https://github.com/gmt2001/ouroboros/compare/1.8.0...v1.7.0)
 

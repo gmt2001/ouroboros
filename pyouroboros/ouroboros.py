@@ -77,6 +77,10 @@ def main():
                             help='Set the timezone of notifications\nDEFAULT: UTC')
 
     docker_group = parser.add_argument_group("Docker", "Configuration of docker functionality")
+    docker_group.add_argument('--docker-timeout', type=int, default=Config.docker_timeout, dest='DOCKER_TIMEOUT',
+                              help='Docker client timeout, in seconds\n'
+                                   'DEFAULT: 60')
+
     docker_group.add_argument('-m', '--monitor', nargs='+', default=Config.monitor, dest='MONITOR',
                               help='Which container(s) to monitor\n'
                                    'DEFAULT: All')

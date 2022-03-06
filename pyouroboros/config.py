@@ -9,7 +9,7 @@ class Config(object):
                'INFLUX_URL', 'INFLUX_PORT', 'INFLUX_USERNAME', 'INFLUX_PASSWORD', 'INFLUX_DATABASE', 'INFLUX_SSL',
                'INFLUX_VERIFY_SSL', 'DATA_EXPORT', 'SELF_UPDATE', 'LABEL_ENABLE', 'DOCKER_TLS', 'LABELS_ONLY',
                'DRY_RUN', 'MONITOR_ONLY', 'HOSTNAME', 'DOCKER_TLS_VERIFY', 'SWARM', 'SKIP_STARTUP_NOTIFICATIONS', 'LANGUAGE',
-               'TZ', 'CLEANUP_UNUSED_VOLUMES', 'DOCKER_TIMEOUT']
+               'TZ', 'CLEANUP_UNUSED_VOLUMES', 'DOCKER_TIMEOUT', 'LATEST_ONLY']
 
     hostname = environ.get('HOSTNAME')
     interval = 300
@@ -31,6 +31,7 @@ class Config(object):
     self_update = False
     label_enable = False
     labels_only = False
+    latest_only = False
     language = 'en'
     tz = 'UTC'
 
@@ -99,7 +100,7 @@ class Config(object):
                         print(e)
                 elif option in ['CLEANUP', 'RUN_ONCE', 'INFLUX_SSL', 'INFLUX_VERIFY_SSL', 'DRY_RUN', 'MONITOR_ONLY', 'SWARM',
                                 'SELF_UPDATE', 'LABEL_ENABLE', 'DOCKER_TLS', 'LABELS_ONLY', 'DOCKER_TLS_VERIFY',
-                                'SKIP_STARTUP_NOTIFICATIONS', 'CLEANUP_UNUSED_VOLUMES']:
+                                'SKIP_STARTUP_NOTIFICATIONS', 'CLEANUP_UNUSED_VOLUMES', 'LATEST_ONLY']:
                     if env_opt.lower() in ['true', 'yes']:
                         setattr(self, option.lower(), True)
                     elif env_opt.lower() in ['false', 'no']:

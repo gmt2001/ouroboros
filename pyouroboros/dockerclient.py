@@ -253,9 +253,18 @@ class Container(BaseImageObject):
         for container in self.monitored:
             current_image = container.image
             current_tag = container.attrs['Config']['Image']
+            latest_image = None
+
+            if self.config.latest_only:
+                image_name = current_tag.split(':')[0]
+                try:
+                    latest_image = self.pull(f"{image_name}:latest")
+                except ConnectionError:
+                    latest_image = None
 
             try:
-                latest_image = self.pull(current_tag)
+                if latest_image is None:
+                    latest_image = self.pull(current_tag)
             except ConnectionError:
                 continue
 
@@ -370,13 +379,13 @@ class Container(BaseImageObject):
                     self.client.images.remove(current_image.id)
                 except APIError as e:
                     self.logger.error("Could not delete old image for %s, Error: %s", container.name, e)
-            
+
             if self.config.cleanup_unused_volumes:
                     try:
                         self.docker.client.volumes.prune()
                     except APIError as e:
                         self.logger.error("Could not delete unused volume for %s, Error: %s", container.name, e)
-            
+
             updated_count += 1
 
             self.logger.debug("Incrementing total container updated count")
@@ -493,8 +502,18 @@ class Service(BaseImageObject):
                 self.logger.error('No image SHA for %s. Skipping', image_string)
                 continue
 
+            latest_image = None
+
+            if self.config.latest_only:
+                image_name = tag.split(':')[0]
+                try:
+                    latest_image = self.pull(f"{image_name}:latest")
+                except ConnectionError:
+                    latest_image = None
+
             try:
-                latest_image = self.pull(tag)
+                if latest_image is None:
+                    latest_image = self.pull(tag)
             except ConnectionError:
                 continue
 

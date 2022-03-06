@@ -53,33 +53,33 @@ def main():
     core_group.add_argument('-u', '--self-update', default=Config.self_update, dest='SELF_UPDATE', action='store_true',
                             help='Let ouroboros update itself')
 
-    core_group.add_argument('-S', '--swarm', default=Config.swarm, dest='SWARM', action='store_true',
-                            help='Put ouroboros in swarm mode')
-
     core_group.add_argument('-o', '--run-once', default=Config.run_once, action='store_true', dest='RUN_ONCE',
                             help='Single run')
 
     core_group.add_argument('-A', '--dry-run', default=Config.dry_run, action='store_true', dest='DRY_RUN',
                             help='Run without making changes. Best used with run-once')
 
-    core_group.add_argument('--monitor-only', default=Config.monitor_only, action='store_true', dest='MONITOR_ONLY',
-                            help='Run without making changes. Best used with run-once')
+    core_group.add_argument('-mo', '--monitor-only', default=Config.monitor_only, action='store_true', dest='MONITOR_ONLY',
+                            help='Run and send notifications without making changes')
 
     core_group.add_argument('-N', '--notifiers', nargs='+', default=Config.notifiers, dest='NOTIFIERS',
                             help='Apprise formatted notifiers\n'
                                  'EXAMPLE: -N discord://1234123412341234/jasdfasdfasdfasddfasdf '
                                  'mailto://user:pass@gmail.com')
 
-    core_group.add_argument('-la', '--language', nargs='+', default=Config.language, dest='LANGUAGE',
+    core_group.add_argument('-la', '--language', default=Config.language, dest='LANGUAGE',
                             help='Set the language of the translation\nDEFAULT: en')
 
-    core_group.add_argument('-tz', '--timezone', nargs='+', default=Config.tz, dest='TZ',
-                            help='Set the timezone of notifications\nDEFAULT: UTC')
+    core_group.add_argument('-tz', '--timezone', default=Config.tz, dest='TZ',
+                            help='Set the timezone of notifications and cron\nDEFAULT: UTC')
 
     docker_group = parser.add_argument_group("Docker", "Configuration of docker functionality")
     docker_group.add_argument('--docker-timeout', type=int, default=Config.docker_timeout, dest='DOCKER_TIMEOUT',
                               help='Docker client timeout, in seconds\n'
                                    'DEFAULT: 60')
+
+    docker_group.add_argument('-S', '--swarm', default=Config.swarm, dest='SWARM', action='store_true',
+                            help='Put ouroboros in swarm mode')
 
     docker_group.add_argument('-m', '--monitor', nargs='+', default=Config.monitor, dest='MONITOR',
                               help='Which container(s) to monitor\n'
@@ -101,6 +101,9 @@ def main():
 
     docker_group.add_argument('-c', '--cleanup', default=Config.cleanup, dest='CLEANUP', action='store_true',
                               help='Remove old images after updating')
+
+    docker_group.add_argument('-L', '--latest-only', default=Config.latest_only dest='LATEST_ONLY', action='store_true',
+                              help='Always update to :latest tag regardless of current tag, if available')
 
     docker_group.add_argument('-r', '--repo-user', default=Config.repo_user, dest='REPO_USER',
                               help='Private docker registry username\n'

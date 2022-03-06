@@ -25,14 +25,14 @@ class NotificationManager(object):
 
     def build_apprise(self):
         asset = apprise.AppriseAsset(
-            image_url_mask='https://i.imgur.com/L40ksWY.png',
+            image_url_mask='https://raw.githubusercontent.com/gmt2001/ouroboros/main/assets/ouroboros_logo_icon_72.png',
             default_extension='.png'
         )
         asset.app_id = "Ouroboros"
         asset.app_desc = "Ouroboros"
-        asset.app_url = "https://github.com/pyouroboros/ouroboros"
+        asset.app_url = "https://github.com/gmt2001/ouroboros"
         asset.html_notify_map['info'] = '#5F87C6'
-        asset.image_url_logo = 'https://bin.cajun.pro/images/ouroboros/notifications/ouroboros-logo-256x256.png'
+        asset.image_url_logo = 'https://raw.githubusercontent.com/gmt2001/ouroboros/main/assets/ouroboros_logo_icon_256.png'
 
         apprise_obj = apprise.Apprise(asset=asset)
 

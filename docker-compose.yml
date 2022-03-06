@@ -3,7 +3,7 @@ services:
   ouroboros:
     container_name: ouroboros
     hostname: ouroboros
-    image: gmt2001/ouroboros
+    image: ghcr.io/gmt2001/ouroboros
     environment:
       - CLEANUP=true
       - INTERVAL=300

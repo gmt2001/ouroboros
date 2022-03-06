@@ -199,6 +199,7 @@ def main():
                         day=config.cron[2],
                         month=config.cron[3],
                         day_of_week=config.cron[4],
+                        timezone=timezone(config.tz),
                         misfire_grace_time=15
                     )
                 else:

@@ -29,7 +29,7 @@ Ouroboros is deployed via docker image like so:
 ```bash
 docker run -d --name ouroboros \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  gmt2001/ouroboros
+  ghcr.io/gmt2001/ouroboros
 ```
 
 > This image is compatible with amd64, arm64, and arm/v7 CPU architectures

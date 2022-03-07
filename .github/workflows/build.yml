@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-    OUROBOROS_VERSION: 1.9.0
+    OUROBOROS_VERSION: 1.10.0
 
 jobs:
   build:

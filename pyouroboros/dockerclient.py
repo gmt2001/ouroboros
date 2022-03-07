@@ -433,11 +433,13 @@ class Container(BaseImageObject):
             self.logger.debug('Ahhh. All better.')
             run_hook('after_self_cleanup', None, locals)
 
+            self.data_manager.load()
             self.monitored = self.monitor_filter()
         elif count == 1:
             self.logger.debug('I need to update! Starting the ouroboros ;)')
             self_name = 'ouroboros-updated' if old_container.name == 'ouroboros' else 'ouroboros'
             new_config = set_properties(old=old_container, new=new_image, self_name=self_name)
+            self.data_manager.save()
             locals = {}
             locals['self_name'] = self_name
             locals['old_container'] = old_container

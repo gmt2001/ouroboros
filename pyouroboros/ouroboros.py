@@ -114,6 +114,9 @@ def main():
                                    'EXAMPLE: MyPa$$w0rd')
 
     data_group = parser.add_argument_group('Data Export', 'Configuration of data export functionality')
+    data_group.add_argument('-sc', '--save-counters', default=Config.save_counters, dest='SAVE_COUNTERS',
+                            action='store_true', help='Save total-updated counters across self-updates')
+
     data_group.add_argument('-D', '--data-export', choices=['prometheus', 'influxdb'], default=Config.data_export,
                             dest='DATA_EXPORT', help='Enable exporting of data for chosen option')
 

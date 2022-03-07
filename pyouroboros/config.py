@@ -9,7 +9,7 @@ class Config(object):
                'INFLUX_URL', 'INFLUX_PORT', 'INFLUX_USERNAME', 'INFLUX_PASSWORD', 'INFLUX_DATABASE', 'INFLUX_SSL',
                'INFLUX_VERIFY_SSL', 'DATA_EXPORT', 'SELF_UPDATE', 'LABEL_ENABLE', 'DOCKER_TLS', 'LABELS_ONLY',
                'DRY_RUN', 'MONITOR_ONLY', 'HOSTNAME', 'DOCKER_TLS_VERIFY', 'SWARM', 'SKIP_STARTUP_NOTIFICATIONS', 'LANGUAGE',
-               'TZ', 'CLEANUP_UNUSED_VOLUMES', 'DOCKER_TIMEOUT', 'LATEST_ONLY']
+               'TZ', 'CLEANUP_UNUSED_VOLUMES', 'DOCKER_TIMEOUT', 'LATEST_ONLY', 'SAVE_COUNTERS']
 
     hostname = environ.get('HOSTNAME')
     interval = 300
@@ -34,6 +34,8 @@ class Config(object):
     latest_only = False
     language = 'en'
     tz = 'UTC'
+
+    save_counters = False
 
     repo_user = None
     repo_pass = None

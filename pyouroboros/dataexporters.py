@@ -1,9 +1,11 @@
 import prometheus_client
-
+import json
+from os import unlink
 from logging import getLogger
 from influxdb import InfluxDBClient
 from datetime import datetime, timezone
-
+from pathlib import Path
+from pyouroboros.helpers import get_exec_dir
 
 class DataManager(object):
     def __init__(self, config):
@@ -30,6 +32,25 @@ class DataManager(object):
     def set(self, socket):
         if self.config.data_export == "prometheus" and self.enabled:
             self.prometheus.set_monitored(socket)
+
+    def save(self):
+        if self.config.save_counters:
+            fpath = Path(get_exec_dir() + '/hooks/datamanager.json')
+            try:
+                with open(fpath, 'w') as file:
+                    json.dump(self.total_updated, file)
+            except:
+                self.logger.debug('Unable to save JSON')
+
+    def load(self):
+        if self.config.save_counters:
+            fpath = Path(get_exec_dir() + '/hooks/datamanager.json')
+            try:
+                with open(fpath, 'r') as file:
+                    self.total_updated = json.load(file)
+                unlink(fpath)
+            except:
+                self.logger.debug('No JSON to load or unlink failed')
 
 
 class PrometheusExporter(object):

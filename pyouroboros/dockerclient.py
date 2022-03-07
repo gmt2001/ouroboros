@@ -416,13 +416,14 @@ class Container(BaseImageObject):
     def update_self(self, count=None, old_container=None, me_list=None, new_image=None):
         if count == 2:
             self.logger.debug('God im messy... cleaning myself up.')
-            old_me_id = me_list[0].id if me_list[0].attrs['Created'] < me_list[1].attrs['Created'] else me_list[1].id
+            old_me_index = 0 if me_list[0].attrs['Created'] < me_list[1].attrs['Created'] else 1
+            old_me_id = me_list[old_me_index].id
             old_me = self.client.containers.get(old_me_id)
             old_me_image_id = old_me.image.id
 
             locals = {}
             locals['old_container'] = old_me
-            locals['new_container'] = self.client.containers.get(me_list[0].id if me_list[0].attrs['Created'] >= me_list[1].attrs['Created'] else me_list[1].id)
+            locals['new_container'] = self.client.containers.get(me_list[0].id if old_me_index == 1 else me_list[1].id)
             run_hook('before_self_cleanup', None, locals)
 
             old_me.stop()

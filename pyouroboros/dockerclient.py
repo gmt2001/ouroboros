@@ -290,7 +290,7 @@ class Container(BaseImageObject):
             try:
                 hard_depends_on_containers.append(self.client.containers.get(name))
             except NotFound:
-                self.logger.error("Could not find dependant container %s on socket %s. Ignoring", name, self.socket)
+                self.logger.error("Could not find dependent container %s on socket %s. Ignoring", name, self.socket)
 
         depends_on_containers = []
         depends_on_names = list(set(depends_on_names))
@@ -299,7 +299,7 @@ class Container(BaseImageObject):
             try:
                 depends_on_containers.append(self.client.containers.get(name))
             except NotFound:
-                self.logger.error("Could not find dependant container %s on socket %s. Ignoring", name, self.socket)
+                self.logger.error("Could not find dependent container %s on socket %s. Ignoring", name, self.socket)
 
         return updateable, depends_on_containers, hard_depends_on_containers
 

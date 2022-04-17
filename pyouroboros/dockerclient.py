@@ -140,7 +140,7 @@ class Container(BaseImageObject):
         new_container = self.client.containers.get(created.get("Id"))
 
         # connect the new container to all networks of the old container
-        for network_name, network_config in container.attrs['NetworkSettings']['Networks'].items():
+        for network_config in container.attrs['NetworkSettings']['Networks'].values():
             network = self.client.networks.get(network_config['NetworkID'])
             try:
                 network.disconnect(new_container.id, force=True)
@@ -307,18 +307,18 @@ class Container(BaseImageObject):
         updated_count = 0
         try:
             updateable, depends_on_containers, hard_depends_on_containers = self.socket_check()
-            locals = {}
-            locals['updateable'] = updateable
-            locals['depends_on_containers'] = depends_on_containers
-            locals['hard_depends_on_containers'] = hard_depends_on_containers
-            run_hook('updates_enumerated', None, locals)
+            mylocals = {}
+            mylocals['updateable'] = updateable
+            mylocals['depends_on_containers'] = depends_on_containers
+            mylocals['hard_depends_on_containers'] = hard_depends_on_containers
+            run_hook('updates_enumerated', None, mylocals)
         except TypeError:
             return
 
         for container in depends_on_containers + hard_depends_on_containers:
-            locals = {}
-            locals['container'] = container
-            run_hook('before_stop_depends_container', None, locals)
+            mylocals = {}
+            mylocals['container'] = container
+            run_hook('before_stop_depends_container', None, mylocals)
             self.stop(container)
 
         for container, current_image, latest_image in updateable:
@@ -326,11 +326,11 @@ class Container(BaseImageObject):
                 # Ugly hack for repo digest
                 repo_digest_id = current_image.attrs['RepoDigests'][0].split('@')[1]
                 if repo_digest_id != latest_image.id:
-                    locals = {}
-                    locals['container'] = container
-                    locals['current_image'] = current_image
-                    locals['latest_image'] = latest_image
-                    run_hook('dry_run_update', None, locals)
+                    mylocals = {}
+                    mylocals['container'] = container
+                    mylocals['current_image'] = current_image
+                    mylocals['latest_image'] = latest_image
+                    run_hook('dry_run_update', None, mylocals)
                     self.logger.info('dry run : %s would be updated', container.name)
                 continue
 
@@ -338,11 +338,11 @@ class Container(BaseImageObject):
                 # Ugly hack for repo digest
                 repo_digest_id = current_image.attrs['RepoDigests'][0].split('@')[1]
                 if repo_digest_id != latest_image.id:
-                    locals = {}
-                    locals['container'] = container
-                    locals['current_image'] = current_image
-                    locals['latest_image'] = latest_image
-                    run_hook('notify_update', None, locals)
+                    mylocals = {}
+                    mylocals['container'] = container
+                    mylocals['current_image'] = current_image
+                    mylocals['latest_image'] = latest_image
+                    run_hook('notify_update', None, mylocals)
                     self.notification_manager.send(
                         container_tuples=[(container.name, current_image, latest_image)],
                         socket=self.socket,
@@ -360,22 +360,22 @@ class Container(BaseImageObject):
 
             self.logger.info('%s will be updated', container.name)
 
-            locals = {}
-            locals['old_container'] = container
-            locals['old_image'] = current_image
-            locals['new_image'] = latest_image
-            run_hook('before_update', None, locals)
+            mylocals = {}
+            mylocals['old_container'] = container
+            mylocals['old_image'] = current_image
+            mylocals['new_image'] = latest_image
+            run_hook('before_update', None, mylocals)
 
             new_container = self.recreate(container, latest_image)
 
-            locals['new_container'] = new_container
-            run_hook('after_update', None, locals)
+            mylocals['new_container'] = new_container
+            run_hook('after_update', None, mylocals)
 
             if self.config.cleanup:
                 try:
-                    locals = {}
-                    locals['image'] = current_image
-                    run_hook('before_image_cleanup', None, locals)
+                    mylocals = {}
+                    mylocals['image'] = current_image
+                    run_hook('before_image_cleanup', None, mylocals)
                     self.client.images.remove(current_image.id)
                 except APIError as e:
                     self.logger.error("Could not delete old image for %s, Error: %s", container.name, e)
@@ -396,19 +396,19 @@ class Container(BaseImageObject):
 
         for container in depends_on_containers:
             # Reload container to ensure it isn't referencing the old image
-            locals = {}
-            locals['container'] = container
-            run_hook('before_start_depends_container', None, locals)
+            mylocals = {}
+            mylocals['container'] = container
+            run_hook('before_start_depends_container', None, mylocals)
             container.reload()
             container.start()
 
         for container in hard_depends_on_containers:
-            locals = {}
-            locals['old_container'] = container
-            run_hook('before_recreate_hard_depends_container', None, locals)
+            mylocals = {}
+            mylocals['old_container'] = container
+            run_hook('before_recreate_hard_depends_container', None, mylocals)
             new_container = self.recreate(container, container.image)
-            locals['new_container'] = new_container
-            run_hook('after_recreate_hard_depends_container', None, locals)
+            mylocals['new_container'] = new_container
+            run_hook('after_recreate_hard_depends_container', None, mylocals)
 
         if updated_count > 0:
             self.notification_manager.send(container_tuples=updateable, socket=self.socket, kind='update')
@@ -421,17 +421,17 @@ class Container(BaseImageObject):
             old_me = self.client.containers.get(old_me_id)
             old_me_image_id = old_me.image.id
 
-            locals = {}
-            locals['old_container'] = old_me
-            locals['new_container'] = self.client.containers.get(me_list[0].id if old_me_index == 1 else me_list[1].id)
-            run_hook('before_self_cleanup', None, locals)
+            mylocals = {}
+            mylocals['old_container'] = old_me
+            mylocals['new_container'] = self.client.containers.get(me_list[0].id if old_me_index == 1 else me_list[1].id)
+            run_hook('before_self_cleanup', None, mylocals)
 
             old_me.stop()
             old_me.remove()
 
             self.client.images.remove(old_me_image_id)
             self.logger.debug('Ahhh. All better.')
-            run_hook('after_self_cleanup', None, locals)
+            run_hook('after_self_cleanup', None, mylocals)
 
             self.data_manager.load()
             self.monitored = self.monitor_filter()
@@ -440,11 +440,11 @@ class Container(BaseImageObject):
             self_name = 'ouroboros-updated' if old_container.name == 'ouroboros' else 'ouroboros'
             new_config = set_properties(old=old_container, new=new_image, self_name=self_name)
             self.data_manager.save()
-            locals = {}
-            locals['self_name'] = self_name
-            locals['old_container'] = old_container
-            locals['new_image'] = new_image
-            run_hook('before_self_update', None, locals)
+            mylocals = {}
+            mylocals['self_name'] = self_name
+            mylocals['old_container'] = old_container
+            mylocals['new_image'] = new_image
+            run_hook('before_self_update', None, mylocals)
             try:
                 me_created = self.client.api.create_container(**new_config)
                 new_me = self.client.containers.get(me_created.get("Id"))
@@ -452,8 +452,8 @@ class Container(BaseImageObject):
                 self.logger.debug('If you strike me down, I shall become '
                                   'more powerful than you could possibly imagine.')
                 self.logger.debug('https://bit.ly/2VVY7GH')
-                locals['new_container'] = new_me
-                run_hook('after_self_update', None, locals)
+                mylocals['new_container'] = new_me
+                run_hook('after_self_update', None, mylocals)
                 sleep(30)
             except APIError as e:
                 self.logger.error("Self update failed.")

@@ -2,7 +2,6 @@ import apprise
 import gettext
 
 from logging import getLogger
-from datetime import datetime
 from babel import dates
 from pytz import timezone
 

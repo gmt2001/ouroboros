@@ -102,7 +102,7 @@ def main():
     docker_group.add_argument('-c', '--cleanup', default=Config.cleanup, dest='CLEANUP', action='store_true',
                               help='Remove old images after updating')
 
-    docker_group.add_argument('-L', '--latest-only', default=Config.latest_only dest='LATEST_ONLY', action='store_true',
+    docker_group.add_argument('-L', '--latest-only', default=Config.latest_only, dest='LATEST_ONLY', action='store_true',
                               help='Always update to :latest tag regardless of current tag, if available')
 
     docker_group.add_argument('-r', '--repo-user', default=Config.repo_user, dest='REPO_USER',

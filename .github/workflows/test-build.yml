@@ -40,5 +40,5 @@ jobs:
           tester/ouroboros:test
     - name: Test with Docker
       run: |
-        mkdir -p /app/pyouroboros/hooks
+        sudo mkdir -p /app/pyouroboros/hooks
         docker run --rm --name ouroboros -v /var/run/docker.sock:/var/run/docker.sock -v /app/pyouroboros/hooks:/app/pyouroboros/hooks tester/ouroboros:test --run-once --dry-run

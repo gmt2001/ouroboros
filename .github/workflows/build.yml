@@ -33,7 +33,7 @@ jobs:
         driver-opts: network=host
     - name: Update Version String
       run: |
-        sed -i -r 's/VERSION = "custom"/VERSION = "test"/' pyouroboros/__init__.py
+        sed -i -r 's/VERSION = "custom"/VERSION = "0.0+test"/' pyouroboros/__init__.py
         echo $?\
     - name: Build Docker
       uses: docker/build-push-action@v2
@@ -46,7 +46,7 @@ jobs:
     - name: Test with Docker
       run: |
         sudo mkdir -p /app/pyouroboros/hooks
-        docker run --rm --name ouroboros -v /var/run/docker.sock:/var/run/docker.sock -v /app/pyouroboros/hooks:/app/pyouroboros/hooks localhost:5000/tester/ouroboros:test /app/ouroboros --run-once --dry-run
+        docker run --rm --name ouroboros -v /var/run/docker.sock:/var/run/docker.sock localhost:5000/tester/ouroboros:test ouroboros --run-once --dry-run
   build:
     name: Docker Build on ubuntu-latest
     runs-on: ubuntu-latest

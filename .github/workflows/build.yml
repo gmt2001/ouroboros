@@ -12,6 +12,11 @@ jobs:
   test:
     name: Docker Test on ubuntu-latest
     runs-on: ubuntu-latest
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
@@ -25,6 +30,7 @@ jobs:
       uses: docker/setup-buildx-action@v1
       with:
         version: latest
+        driver-opts: network=host
     - name: Update Version String
       run: |
         sed -i -r 's/VERSION = "custom"/VERSION = "test"/' pyouroboros/__init__.py
@@ -35,13 +41,12 @@ jobs:
         context: .
         file: ./Dockerfile
         platforms: linux/amd64
-        push: false
-        tags: |
-          tester/ouroboros:test
+        push: true
+        tags: localhost:5000/tester/ouroboros:test
     - name: Test with Docker
       run: |
         sudo mkdir -p /app/pyouroboros/hooks
-        docker run --rm --name ouroboros -v /var/run/docker.sock:/var/run/docker.sock -v /app/pyouroboros/hooks:/app/pyouroboros/hooks tester/ouroboros:test --run-once --dry-run
+        docker run --rm --name ouroboros -v /var/run/docker.sock:/var/run/docker.sock -v /app/pyouroboros/hooks:/app/pyouroboros/hooks localhost:5000/tester/ouroboros:test --run-once --dry-run
   build:
     name: Docker Build on ubuntu-latest
     runs-on: ubuntu-latest

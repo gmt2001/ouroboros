@@ -27,7 +27,7 @@ jobs:
       with:
         platforms: amd64
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@v2
       with:
         version: latest
         driver-opts: network=host
@@ -80,7 +80,7 @@ jobs:
         platforms: amd64,arm64,arm
     - name: Set up Docker Buildx
       if: contains(steps.check_credentials.outputs.missingsecrets, 'no')
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@v2
       with:
         version: latest
     - name: Login to DockerHub Registry

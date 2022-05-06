@@ -23,7 +23,7 @@ jobs:
       with:
         fetch-depth: 1
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v1
+      uses: docker/setup-qemu-action@v2
       with:
         platforms: amd64
     - name: Set up Docker Buildx
@@ -75,7 +75,7 @@ jobs:
         fetch-depth: 1
     - name: Set up QEMU
       if: contains(steps.check_credentials.outputs.missingsecrets, 'no')
-      uses: docker/setup-qemu-action@v1
+      uses: docker/setup-qemu-action@v2
       with:
         platforms: amd64,arm64,arm
     - name: Set up Docker Buildx

@@ -1,4 +1,4 @@
-FROM python:3.10.5-alpine
+FROM python:3.11.0rc1-alpine
 
 ENV TZ UTC
 

@@ -25,11 +25,15 @@ def execfile(filepath, myglobals=None, mylocals=None):
     with open(filepath, 'rb') as file:
         exec(compile(file.read(), filepath, 'exec'), myglobals, mylocals)
 
+def isContainerNetwork(container):
+    parts = container.attrs['HostConfig']['NetworkMode'].split(':')
+    return len(parts) > 1 and parts[0] == 'container'
+
 def set_properties(old, new, self_name=None):
     """Store object for spawning new container in place of the one with outdated image"""
     properties = {
         'name': self_name if self_name else old.name,
-        'hostname': old.attrs['Config']['Hostname'],
+        'hostname': '' if isContainerNetwork(old) else old.attrs['Config']['Hostname'],
         'user': old.attrs['Config']['User'],
         'detach': True,
         'domainname': old.attrs['Config']['Domainname'],

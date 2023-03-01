@@ -36,7 +36,7 @@ jobs:
         sed -i -r 's/VERSION = "custom"/VERSION = "0.0+test"/' pyouroboros/__init__.py
         echo $?\
     - name: Build Docker
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v4
       with:
         context: .
         file: ./Dockerfile
@@ -105,7 +105,7 @@ jobs:
         echo $?\
     - name: Build and Push Docker
       if: contains(steps.check_credentials.outputs.missingsecrets, 'no')
-      uses: docker/build-push-action@v3
+      uses: docker/build-push-action@v4
       with:
         context: .
         file: ./Dockerfile

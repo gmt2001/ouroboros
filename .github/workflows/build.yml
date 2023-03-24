@@ -3,10 +3,6 @@ name: Build
 on:
   release:
     types: [published]
-  workflow_dispatch:
-
-env:
-    OUROBOROS_VERSION: 1.11.1
 
 jobs:
   test:
@@ -73,6 +69,11 @@ jobs:
       uses: actions/checkout@v3
       with:
         fetch-depth: 1
+    - name: Get Revision Variables
+      id: build_env
+      run: |
+        echo ${GITHUB_REF:10}
+        echo "branch=${GITHUB_REF:10}" >> $GITHUB_OUTPUT
     - name: Set up QEMU
       if: contains(steps.check_credentials.outputs.missingsecrets, 'no')
       uses: docker/setup-qemu-action@v2
@@ -100,6 +101,8 @@ jobs:
         logout: true
     - name: Update Version String
       if: contains(steps.check_credentials.outputs.missingsecrets, 'no')
+      env:
+        OUROBOROS_VERSION: ${{ steps.build_env.outputs.branch }}
       run: |
         sed -i -r 's/VERSION = "custom"/VERSION = "'$OUROBOROS_VERSION'"/' pyouroboros/__init__.py
         echo $?\
@@ -112,7 +115,7 @@ jobs:
         platforms: linux/amd64,linux/arm64,linux/arm/v7
         push: true
         tags: |
-          ${{ secrets.DOCKER_USER }}/ouroboros:${{ env.OUROBOROS_VERSION }}
+          ${{ secrets.DOCKER_USER }}/ouroboros:${{ steps.build_env.outputs.branch }}
           ${{ secrets.DOCKER_USER }}/ouroboros:latest
-          ghcr.io/${{ github.repository_owner }}/ouroboros:${{ env.OUROBOROS_VERSION }}
+          ghcr.io/${{ github.repository_owner }}/ouroboros:${{ steps.build_env.outputs.branch }}
           ghcr.io/${{ github.repository_owner }}/ouroboros:latest

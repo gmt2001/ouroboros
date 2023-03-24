@@ -19,7 +19,8 @@ class NotificationManager(object):
             language.install()
             self._ = language.gettext
         except FileNotFoundError:
-            self.logger.error("Can't find the '%s' language", self.config.language)
+            if not self.config.language == 'en':
+                self.logger.error("Can't find the '%s' language", self.config.language)
             self._ = gettext.gettext
 
     def build_apprise(self):

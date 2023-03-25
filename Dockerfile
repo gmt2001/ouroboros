@@ -4,7 +4,9 @@ ENV TZ UTC
 
 WORKDIR /app
 
-COPY /requirements.txt /setup.py /ouroboros /README.md /app/
+COPY /setup.py /ouroboros /README.md /app/
+
+COPY /requirements.txt
 
 RUN apk update && apk upgrade \
     && apk add --no-cache --virtual .build-deps gcc build-base linux-headers \
@@ -14,9 +16,9 @@ RUN apk update && apk upgrade \
     && pip install --no-cache-dir -r requirements.txt \
     && apk del .build-deps
 
-COPY /pyouroboros /app/pyouroboros
-
 COPY /locales /app/locales
+
+COPY /pyouroboros /app/pyouroboros
 
 RUN pip install --no-cache-dir .
 

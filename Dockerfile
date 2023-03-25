@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY /setup.py /ouroboros /README.md /app/
 
-COPY /requirements.txt
+COPY /requirements.txt /app/
 
 RUN apk update && apk upgrade \
     && apk add --no-cache --virtual .build-deps gcc build-base linux-headers \

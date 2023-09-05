@@ -39,27 +39,27 @@ class NotificationManager(object):
         for notifier in self.config.notifiers:
             add = apprise_obj.add(notifier)
             if not add:
-                self.logger.error(_('Could not add notifier %s'), notifier)
+                self.logger.error(self._('Could not add notifier %s'), notifier)
 
         return apprise_obj
 
     def send(self, container_tuples=None, socket=None, kind='update', next_run=None, mode='container'):
         if kind == 'startup':
-            title = _('Ouroboros has started')
+            title = self._('Ouroboros has started')
             body_fields = [
-                _('Host: %s') % self.config.hostname,
-                _('Time: %s') % dates.format_datetime(None, format='full', tzinfo=timezone(self.config.tz), locale=self.config.language),
-                _('Next Run: %s') % dates.format_datetime(next_run, format='full', tzinfo=timezone(self.config.tz), locale=self.config.language)]
+                self._('Host: %s') % self.config.hostname,
+                self._('Time: %s') % dates.format_datetime(None, format='full', tzinfo=timezone(self.config.tz), locale=self.config.language),
+                self._('Next Run: %s') % dates.format_datetime(next_run, format='full', tzinfo=timezone(self.config.tz), locale=self.config.language)]
         elif kind == 'monitor':
-            title = _('Ouroboros has detected updates!')
+            title = self._('Ouroboros has detected updates!')
             body_fields = [
-                _('Host/Socket: %s / %s') % (self.config.hostname, socket.split('//')[1]),
-                _('Containers Monitored: %d') % self.data_manager.monitored_containers[socket],
-                _('Total Containers Updated: %d') % self.data_manager.total_updated[socket]
+                self._('Host/Socket: %s / %s') % (self.config.hostname, socket.split('//')[1]),
+                self._('Containers Monitored: %d') % self.data_manager.monitored_containers[socket],
+                self._('Total Containers Updated: %d') % self.data_manager.total_updated[socket]
             ]
             body_fields.extend(
                 [
-                    _("{} updated from {} to {}").format(
+                    self._("{} updated from {} to {}").format(
                         container.name,
                         old_image if mode == 'service' else old_image.short_id.split(':')[1],
                         new_image.short_id.split(':')[1]
@@ -67,16 +67,16 @@ class NotificationManager(object):
                 ]
             )
         else:
-            title = _('Ouroboros has updated containers!')
+            title = self._('Ouroboros has updated containers!')
             body_fields = [
-                _('Host/Socket: %s / %s') % (self.config.hostname, socket.split('//')[1]),
-                _('Containers Monitored: %d') % self.data_manager.monitored_containers[socket],
-                _('Total Containers Updated: %d') % self.data_manager.total_updated[socket],
-                _('Containers updated this pass: %d') % len(container_tuples)
+                self._('Host/Socket: %s / %s') % (self.config.hostname, socket.split('//')[1]),
+                self._('Containers Monitored: %d') % self.data_manager.monitored_containers[socket],
+                self._('Total Containers Updated: %d') % self.data_manager.total_updated[socket],
+                self._('Containers updated this pass: %d') % len(container_tuples)
             ]
             body_fields.extend(
                 [
-                    _("{} updated from {} to {}").format(
+                    self._("{} updated from {} to {}").format(
                         container.name,
                         old_image if mode == 'service' else old_image.short_id.split(':')[1],
                         new_image.short_id.split(':')[1]

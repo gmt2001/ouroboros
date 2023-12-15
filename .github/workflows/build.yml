@@ -44,7 +44,7 @@ jobs:
     - name: Test with Docker
       run: |
         sudo mkdir -p /app/pyouroboros/hooks
-        docker run --rm --name ouroboros -v /var/run/docker.sock:/var/run/docker.sock localhost:5000/tester/ouroboros:test --run-once --dry-run
+        docker run --rm --name ouroboros -v /var/run/docker.sock:/var/run/docker.sock localhost:5000/tester/ouroboros:test --run-once --dry-run --log-level debug
   build:
     name: Docker Build on ubuntu-latest
     runs-on: ubuntu-latest

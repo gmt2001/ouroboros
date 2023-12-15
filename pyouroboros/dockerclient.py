@@ -81,6 +81,7 @@ class BaseImageObject(object):
                     return_image = self.client.images.pull(tag)
                 return return_image
         except APIError as e:
+            self.logger.debug(str(e))
             if '<html>' in str(e):
                 self.logger.debug("Docker api issue. Ignoring")
                 raise ConnectionError

@@ -320,7 +320,8 @@ class Container(BaseImageObject):
             mylocals = {}
             mylocals['container'] = container
             run_hook('before_stop_depends_container', None, mylocals)
-            self.stop(container)
+            if not self.config.dry_run and not self.config.monitor_only:
+                self.stop(container)
 
         for container, current_image, latest_image in updateable:
             if self.config.dry_run:
@@ -400,15 +401,19 @@ class Container(BaseImageObject):
             mylocals = {}
             mylocals['container'] = container
             run_hook('before_start_depends_container', None, mylocals)
-            container.reload()
-            container.start()
+            if not self.config.dry_run and not self.config.monitor_only:
+                container.reload()
+                container.start()
 
         for container in hard_depends_on_containers:
             mylocals = {}
             mylocals['old_container'] = container
             run_hook('before_recreate_hard_depends_container', None, mylocals)
-            new_container = self.recreate(container, container.image)
-            mylocals['new_container'] = new_container
+            if not self.config.dry_run and not self.config.monitor_only:
+                new_container = self.recreate(container, container.image)
+                mylocals['new_container'] = new_container
+            else:
+                mylocals['new_container'] = container
             run_hook('after_recreate_hard_depends_container', None, mylocals)
 
         if updated_count > 0:

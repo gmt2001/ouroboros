@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{d41e6627-82ce-4f97-b788-65fefa7ed519}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>setup.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include=".github\dependabot.yml" />
+    <Content Include=".github\workflows\build.yml" />
+    <Content Include=".github\workflows\codeql-analysis.yml" />
+    <Content Include=".github\workflows\test-build.yml" />
+    <Content Include=".gitignore" />
+    <Content Include="assets\ouroboros_logo_icon_256.png" />
+    <Content Include="assets\ouroboros_logo_icon_72.png" />
+    <Content Include="assets\ouroboros_logo_primary.png" />
+    <Content Include="assets\ouroboros_logo_primary_cropped.jpg" />
+    <Content Include="assets\ouroboros_logo_primary_cropped.png" />
+    <Content Include="assets\ouroboros_logo_primary_discord.jpg" />
+    <Content Include="assets\ouroboros_logo_primary_long_cropped.jpg" />
+    <Content Include="assets\ouroboros_logo_primary_smaller_square_crop.png" />
+    <Content Include="CHANGELOG.md" />
+    <Content Include="docker-compose.yml" />
+    <Content Include="Dockerfile" />
+    <Content Include="LICENSE" />
+    <Content Include="locales\es_ES\LC_MESSAGES\notifiers.mo" />
+    <Content Include="locales\es_ES\LC_MESSAGES\notifiers.po" />
+    <Content Include="locales\es_ES\LC_MESSAGES\ouroboros.mo" />
+    <Content Include="locales\es_ES\LC_MESSAGES\ouroboros.po" />
+    <Content Include="locales\notifiers.pot" />
+    <Content Include="locales\ouroboros.pot" />
+    <Content Include="MANIFEST.in" />
+    <Content Include="ouroboros" />
+    <Content Include="README.md" />
+    <Content Include="requirements.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="pyouroboros\config.py" />
+    <Compile Include="pyouroboros\dataexporters.py" />
+    <Compile Include="pyouroboros\dockerclient.py" />
+    <Compile Include="pyouroboros\helpers.py" />
+    <Compile Include="pyouroboros\logger.py" />
+    <Compile Include="pyouroboros\notifiers.py" />
+    <Compile Include="pyouroboros\ouroboros.py" />
+    <Compile Include="pyouroboros\__init__.py" />
+    <Compile Include="setup.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include=".github\" />
+    <Folder Include=".github\workflows\" />
+    <Folder Include="assets" />
+    <Folder Include="locales\" />
+    <Folder Include="locales\es_ES\" />
+    <Folder Include="locales\es_ES\LC_MESSAGES\" />
+    <Folder Include="pyouroboros" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>

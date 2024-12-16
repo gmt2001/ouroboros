@@ -8,14 +8,14 @@ from pyouroboros.helpers import set_properties, remove_sha_prefix, get_digest, r
 
 
 class Docker(object):
-    def __init__(self, socket, config, data_manager, notification_manager):
+    def __init__(self, socket, config, data_manager, notification_manager, scheduler):
         self.config = config
         self.socket = socket
         self.client = self.connect()
         self.data_manager = data_manager
         self.logger = getLogger()
-
         self.notification_manager = notification_manager
+        self.scheduler = scheduler
 
     def connect(self):
         if self.config.docker_tls:
@@ -65,6 +65,7 @@ class BaseImageObject(object):
         self.data_manager = self.docker.data_manager
         self.data_manager.total_updated[self.socket] = 0
         self.notification_manager = self.docker.notification_manager
+        self.scheduler = self.docker.scheduler
 
     def _pull(self, tag):
         """Docker pull image tag"""
@@ -209,8 +210,15 @@ class Container(BaseImageObject):
 
         return running_containers
 
-    def monitor_filter(self):
-        """Return filtered running container objects list"""
+    def monitor_filter(self, nameFilter:list[str]|None=None, filterRemove=False):
+        """
+        Enumerate containers which should be monitored for updates
+
+        Args:
+            nameFilter (list[str]|None): Filters out which containers will be monitored. `None` to not perform any filtering
+            filterRemove (bool): If `False`, only containers whose name matches `nameFilter` will be selected for monitoring.
+                                   If `True`, `nameFilter` instead defines containers to exclude
+        """
         running_containers = self.running_filter()
         monitored_containers = []
 
@@ -225,9 +233,11 @@ class Container(BaseImageObject):
             elif not self.config.labels_only:
                 if self.config.monitor:
                     if container.name in self.config.monitor and container.name not in self.config.ignore:
-                        monitored_containers.append(container)
+                        if nameFilter is None or ((filterRemove is False and container.name in nameFilter) or (filterRemove is True and container.name not in nameFilter)):
+                            monitored_containers.append(container)
                 elif container.name not in self.config.ignore:
-                    monitored_containers.append(container)
+                    if nameFilter is None or container.name in nameFilter:
+                        monitored_containers.append(container)
 
         self.data_manager.monitored_containers[self.socket] = len(monitored_containers)
         self.data_manager.set(self.socket)
@@ -241,11 +251,19 @@ class Container(BaseImageObject):
             if len(me_list) > 1:
                 self.update_self(count=2, me_list=me_list)
 
-    def socket_check(self):
+    def socket_check(self, nameFilter:list[str]|None=None, filterRemove=False):
+        """
+        Enumerate containers needing updates and compile list of dependencies
+
+        Args:
+            nameFilter (list[str]|None): Filters out which containers will be updated. `None` to not perform any filtering
+            filterRemove (bool): If `False`, only containers whose name matches `nameFilter` will be selected for potential update.
+                                   If `True`, `nameFilter` instead defines containers to exclude
+        """
         depends_on_names = []
         hard_depends_on_names = []
         updateable = []
-        self.monitored = self.monitor_filter()
+        self.monitored = self.monitor_filter(nameFilter, filterRemove)
 
         if not self.monitored:
             self.logger.info('No containers are running or monitored on %s', self.socket)
@@ -304,15 +322,33 @@ class Container(BaseImageObject):
 
         return updateable, depends_on_containers, hard_depends_on_containers
 
-    def update(self):
+    def update(self, nameFilter:list[str]|None=None, filterRemove:bool=False):
+        """
+        Enumerate containers needing updates and execute
+
+        Scripts for the `updates_enumerated` hook can take the following special actions:
+          - Add the `updatable[i][0].name` to the `skip` local to skip the update on the current run
+          - Schedule the update to re-fire later (skipping regular updates is still required)
+
+        Args:
+            nameFilter (list[str]|None): Filters out which containers will be updated. `None` to not perform any filtering
+            filterRemove (bool): If `False`, only containers whose name matches `nameFilter` will be selected for potential update.
+                                   If `True`, `nameFilter` instead defines containers to exclude
+        """
         updated_count = 0
         try:
-            updateable, depends_on_containers, hard_depends_on_containers = self.socket_check()
+            updateable, depends_on_containers, hard_depends_on_containers = self.socket_check(nameFilter, filterRemove)
             mylocals = {}
             mylocals['updateable'] = updateable
             mylocals['depends_on_containers'] = depends_on_containers
             mylocals['hard_depends_on_containers'] = hard_depends_on_containers
+            mylocals['skip'] = []
             run_hook('updates_enumerated', None, mylocals)
+
+            if len(mylocals['skip']) > 0:
+                self.logger.debug("Skip list: %s", ", ".join(mylocals['skip']))
+                self.update(mylocals['skip'], True)
+                return
         except TypeError:
             return
 

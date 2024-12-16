@@ -184,7 +184,7 @@ def main():
 
     for socket in config.docker_sockets:
         try:
-            docker = Docker(socket, config, data_manager, notification_manager)
+            docker = Docker(socket, config, data_manager, notification_manager, scheduler)
             if config.swarm:
                 mode = Service(docker)
             else:

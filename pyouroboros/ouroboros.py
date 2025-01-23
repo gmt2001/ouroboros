@@ -46,6 +46,10 @@ def main():
                             help='Cron formatted string for scheduling\n'
                                  'EXAMPLE: "*/5 * * * *"')
 
+    core_group.add_argument('-G', '--grace', default=Config.grace, dest='GRACE',
+                            help='Grace time for late jobs to execute anyway. -1 for always execute; 0 for never execute if late; number of seconds otherwise\n'
+                                'DEFAULT: 15')
+
     core_group.add_argument('-l', '--log-level', choices=['debug', 'info', 'warn', 'error', 'critical'],
                             dest='LOG_LEVEL', default=Config.log_level, help='Set logging level\n'
                                                                              'DEFAULT: info')
@@ -206,7 +210,8 @@ def main():
                         month=config.cron[3],
                         day_of_week=config.cron[4],
                         timezone=timezone(config.tz),
-                        misfire_grace_time=15
+                        coalesce=True,
+                        misfire_grace_time=config.grace
                     )
                 else:
                     scheduler.add_job(
@@ -216,7 +221,9 @@ def main():
                     scheduler.add_job(
                         mode.update,
                         name=_('Interval container update for %s') % socket,
-                        trigger='interval', seconds=config.interval
+                        trigger='interval', seconds=config.interval,
+                        coalesce=True,
+                        misfire_grace_time=config.grace
                     )
         except ConnectionError:
             ol.logger.error(_("Could not connect to socket %s. Check your config"), socket)

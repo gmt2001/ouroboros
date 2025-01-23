@@ -5,7 +5,7 @@ from pyouroboros.logger import BlacklistFilter
 
 class Config(object):
     options = ['INTERVAL', 'PROMETHEUS', 'DOCKER_SOCKETS', 'MONITOR', 'IGNORE', 'LOG_LEVEL', 'PROMETHEUS_ADDR',
-               'PROMETHEUS_PORT', 'NOTIFIERS', 'REPO_USER', 'REPO_PASS', 'CLEANUP', 'RUN_ONCE', 'CRON',
+               'PROMETHEUS_PORT', 'NOTIFIERS', 'REPO_USER', 'REPO_PASS', 'CLEANUP', 'RUN_ONCE', 'CRON', 'GRACE',
                'INFLUX_URL', 'INFLUX_PORT', 'INFLUX_USERNAME', 'INFLUX_PASSWORD', 'INFLUX_DATABASE', 'INFLUX_SSL',
                'INFLUX_VERIFY_SSL', 'DATA_EXPORT', 'SELF_UPDATE', 'LABEL_ENABLE', 'DOCKER_TLS', 'LABELS_ONLY',
                'DRY_RUN', 'MONITOR_ONLY', 'HOSTNAME', 'DOCKER_TLS_VERIFY', 'SWARM', 'SKIP_STARTUP_NOTIFICATIONS', 'LANGUAGE',
@@ -18,6 +18,7 @@ class Config(object):
     docker_tls = False
     docker_tls_verify = True
     docker_timeout = 60
+    grace = 15
     swarm = False
     monitor = []
     ignore = []
@@ -94,7 +95,7 @@ class Config(object):
                 if isinstance(env_opt, str):
                     # Clean out quotes, both single/double and whitespace
                     env_opt = env_opt.strip("'").strip('"').strip(' ')
-                if option in ['INTERVAL', 'PROMETHEUS_PORT', 'INFLUX_PORT', 'DOCKER_TIMEOUT']:
+                if option in ['INTERVAL', 'GRACE', 'PROMETHEUS_PORT', 'INFLUX_PORT', 'DOCKER_TIMEOUT']:
                     try:
                         opt = int(env_opt)
                         setattr(self, option.lower(), opt)

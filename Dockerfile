@@ -1,6 +1,6 @@
 FROM python:3.13.1-alpine
 
-ENV TZ UTC
+ENV TZ=UTC
 
 WORKDIR /app
 

@@ -42,7 +42,6 @@
     <Content Include="locales\es_ES\LC_MESSAGES\ouroboros.po" />
     <Content Include="locales\notifiers.pot" />
     <Content Include="locales\ouroboros.pot" />
-    <Content Include="MANIFEST.in" />
     <Content Include="ouroboros" />
     <Content Include="README.md" />
     <Content Include="requirements.txt" />

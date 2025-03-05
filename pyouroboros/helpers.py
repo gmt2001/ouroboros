@@ -88,7 +88,7 @@ def set_properties(old, new, self_name:str|None=None) -> dict:
         'domainname': old.attrs['Config']['Domainname'],
         'tty': old.attrs['Config']['Tty'],
         'ports': None if isContainerNetwork(old) or not old.attrs['Config'].get('ExposedPorts') else [
-            (p.split('/')[0], p.split('/')[1]) for p in old.attrs['Config']['ExposedPorts'].keys()
+            ((p.split('/')[0], p.split('/')[1]) if '/' in p else p) for p in old.attrs['Config']['ExposedPorts'].keys()
         ],
         'volumes': None if not old.attrs['Config'].get('Volumes') else [
             v for v in old.attrs['Config']['Volumes'].keys()

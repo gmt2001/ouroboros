@@ -162,6 +162,7 @@ jobs:
         fi
         set +e
         docker start --attach testcontainer
+        docker container logs testcontainer
         OUT=$(docker container logs testcontainer 2>&1 | grep -oP '\K[^\s]+ World!')
         set -e
         echo "Expected: Goodbye World!"

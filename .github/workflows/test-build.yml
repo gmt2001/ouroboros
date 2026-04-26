@@ -77,7 +77,6 @@ jobs:
         file: ./Dockerfile
         platforms: linux/amd64
         push: true
-        cache-from: type=gha,scope=main
         tags: localhost:5000/tester/ouroboros:test
     - name: Self-Update Test with Docker
       run: |
@@ -111,7 +110,6 @@ jobs:
         file: ./TestDockerfile
         platforms: linux/amd64
         push: true
-        cache-from: type=gha,scope=main
         tags: localhost:5000/tester/testcontainer:test
     - name: Prepare Container Update Test with Docker
       run: |
@@ -134,7 +132,6 @@ jobs:
         file: ./TestDockerfile
         platforms: linux/amd64
         push: true
-        cache-from: type=gha,scope=main
         tags: localhost:5000/tester/testcontainer:test
     - name: Container Update Test with Docker
       run: |

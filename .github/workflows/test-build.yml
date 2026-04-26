@@ -39,18 +39,6 @@ jobs:
         file: ./Dockerfile
         platforms: linux/amd64
         push: true
-        cache-from: type=gha,scope=main
-        tags: localhost:5000/tester/ouroboros:test
-    - name: Update Build Cache with Docker (main)
-      if: github.ref_name == 'main'
-      uses: docker/build-push-action@v7
-      with:
-        context: .
-        file: ./Dockerfile
-        platforms: linux/amd64
-        push: true
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
         tags: localhost:5000/tester/ouroboros:test
     - name: Execution Test with Docker
       run: |

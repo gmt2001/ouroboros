@@ -111,8 +111,8 @@ jobs:
         fi
     - name: Prepare Container Pre-Update Test with Docker
       run: |
-        echo "#!/user/bin/env bash\necho Hello World!" > ./testfile.sh
-        echo "FROM alpine:latest\nWORKDIR /app\nCOPY /testfile.sh /app/\nCMD /app/testfile.sh" > ./TestDockerfile
+        echo -e "#!/user/bin/env bash\necho Hello World!" > ./testfile.sh
+        echo -e "FROM alpine:latest\nWORKDIR /app\nCOPY /testfile.sh /app/\nCMD /app/testfile.sh" > ./TestDockerfile
     - name: Build Container Pre-Update Test with Docker
       uses: docker/build-push-action@v7
       with:

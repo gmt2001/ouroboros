@@ -86,14 +86,13 @@ jobs:
       run: |
         set +e
         docker start --attach ouroboros
-        CONTAINERS=$(docker container ls --format '{{.Names}}')
-        OLDEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros)
-        NEWEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros-updated)
-        if [ ! -z "$NEWEXISTS" ]; then
+        if [ ! -z "$(docker container ls --format '{{.Names}}' | grep -w ouroboros-updated)" ]; then
           docker container attach ouroboros-updated
           docker container logs ouroboros-updated
         fi
+        sleep 1
         CONTAINERS=$(docker container ls --format '{{.Names}}')
+        echo "$CONTAINERS"
         OLDEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros)
         NEWEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros-updated)
         set -e

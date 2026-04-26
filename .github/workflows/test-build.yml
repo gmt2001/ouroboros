@@ -111,7 +111,7 @@ jobs:
         fi
     - name: Prepare Container Pre-Update Test with Docker
       run: |
-        echo -e "#!/bin/sh\necho Hello World!" > ./testfile.sh
+        echo -e "#!/bin/sh\necho Hello World!\nsleep 30" > ./testfile.sh
         echo -e "FROM alpine:latest\nWORKDIR /app\nCOPY /testfile.sh /app/\nRUN chmod +x /app/testfile.sh\nENTRYPOINT [\"/bin/sh\"]\nCMD [\"/app/testfile.sh\"]" > ./TestDockerfile
     - name: Build Container Pre-Update Test with Docker
       uses: docker/build-push-action@v7
@@ -126,9 +126,6 @@ jobs:
       run: |
         docker create --name testcontainer localhost:5000/tester/testcontainer:test
         set +e
-        echo "::GROUP::Attaching to container before update"
-        docker start --attach ouroboros-updated
-        echo "::ENDGROUP::"
         docker start --attach testcontainer
         OUT=$(docker container logs testcontainer 2>&1 | grep -oP '\K[^\s]+ World!')
         set -e
@@ -138,8 +135,8 @@ jobs:
           echo "Output mismatch before update!" >&2
           exit 1
         fi
-        sudo truncate -s 0 $(docker inspect --format="{{.LogPath}}" testcontainer)
         sed -i -r 's/Hello/Goodbye/' testfile.sh
+        cat testfile.sh
     - name: Build Container Update Test with Docker
       uses: docker/build-push-action@v7
       with:
@@ -152,6 +149,7 @@ jobs:
     - name: Container Update Test with Docker
       run: |
         set +e
+        docker start testcontainer
         echo "::GROUP::Attaching to container during update"
         docker start --attach ouroboros-updated
         echo "::ENDGROUP::"

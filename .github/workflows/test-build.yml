@@ -62,9 +62,9 @@ jobs:
         docker create --name ouroboros -v /var/run/docker.sock:/var/run/docker.sock localhost:5000/tester/ouroboros:test --run-once --self-update --log-level debug
         docker start --attach ouroboros
         VER=$(docker container logs ouroboros 2>&1 | grep -oP 'Version: \K[^\s]+')
-        echo "Expected: 0.0+test"
+        echo "Expected: 0.0+test-main"
         echo "Got:      $VER"
-        if [ "$VER" != "0.0+test" ]; then
+        if [ "$VER" != "0.0+test-main" ]; then
           echo "Version mismatch before update!" >&2
           exit 1
         fi
@@ -94,9 +94,9 @@ jobs:
           exit 1
         fi
         VER=$(docker container logs ouroboros-updated 2>&1 | grep -oP 'Version: \K[^\s]+')
-        echo "Expected: 0.1+test"
+        echo "Expected: 0.1+test-main"
         echo "Got:      $VER"
-        if [ "$VER" != "0.1+test" ]; then
+        if [ "$VER" != "0.1+test-main" ]; then
           echo "Version mismatch after update!" >&2
           exit 1
         fi

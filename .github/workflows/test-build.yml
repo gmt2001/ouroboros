@@ -81,12 +81,14 @@ jobs:
         file: ./Dockerfile
         platforms: linux/amd64
         push: true
+        no-cache: true
         tags: localhost:5000/tester/ouroboros:test
     - name: Self-Update Test with Docker
       run: |
         set +e
         docker start --attach ouroboros
         set -e
+        echo "Checking container list after update..."
         CONTAINERS=$(docker container ls --format '{{.Names}}')
         OLDEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros)
         NEWEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros-updated)
@@ -98,6 +100,7 @@ jobs:
           echo "Updated container not found!" >&2
           exit 1
         fi
+        echo "Checking version after update..."
         VER=$(docker container logs ouroboros-updated 2>&1 | grep -oP 'Version: \K[^\s]+')
         echo "Expected: 0.1+test-main"
         echo "Got:      $VER"
@@ -116,6 +119,7 @@ jobs:
         file: ./TestDockerfile
         platforms: linux/amd64
         push: true
+        no-cache: true
         tags: localhost:5000/tester/testcontainer:test
     - name: Prepare Container Update Test with Docker
       run: |
@@ -140,6 +144,7 @@ jobs:
         file: ./TestDockerfile
         platforms: linux/amd64
         push: true
+        no-cache: true
         tags: localhost:5000/tester/testcontainer:test
     - name: Container Update Test with Docker
       run: |

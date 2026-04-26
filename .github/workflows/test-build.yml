@@ -31,7 +31,7 @@ jobs:
     - name: Update Version String
       run: |
         sed -i -r 's/VERSION = "custom"/VERSION = "0.0+test"/' pyouroboros/__init__.py
-        echo $?\
+        cat pyouroboros/__init__.py
     - name: Build Test with Docker
       uses: docker/build-push-action@v7
       with:
@@ -70,6 +70,7 @@ jobs:
         fi
         sudo truncate -s 0 $(docker inspect --format="{{.LogPath}}" ouroboros)
         sed -i -r 's/VERSION = "0.0+test"/VERSION = "0.1+test"/' pyouroboros/__init__.py
+        cat pyouroboros/__init__.py
     - name: Build Self-Update Test with Docker
       uses: docker/build-push-action@v7
       with:

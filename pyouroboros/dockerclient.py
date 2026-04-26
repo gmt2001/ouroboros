@@ -436,9 +436,16 @@ class Container(BaseImageObject):
             run_hook('before_self_cleanup', None, mylocals)
 
             old_me.stop()
-            old_me.remove()
+            sleep(5)
+            try:
+                old_me.remove()
+            except APIError as e:
+                self.logger.debug("Error removing old container. Error: %s", e)
 
-            self.client.images.remove(old_me_image_id)
+            try:
+                self.client.images.remove(old_me_image_id)
+            except APIError as e:
+                self.logger.debug("Error removing old image. Error: %s", e)
             self.logger.debug('Ahhh. All better.')
             run_hook('after_self_cleanup', None, mylocals)
 

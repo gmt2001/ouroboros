@@ -254,7 +254,7 @@ def main():
                 if job.id == 'self_check':
                     has_self_update = True
             if not has_self_update:
-                scheduler.resubmit_job('update')
+                scheduler.resume_job('update')
         sleep(1)
 
     scheduler.shutdown()

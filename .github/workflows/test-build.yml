@@ -87,7 +87,9 @@ jobs:
         set +e
         docker start --attach ouroboros
         if [ ! -z "$(docker container ls --format '{{.Names}}' | grep -w ouroboros-updated)" ]; then
+          echo "Attaching to updated container..."
           docker container attach ouroboros-updated
+          echo "Updated container logs:"
           docker container logs ouroboros-updated
         fi
         sleep 1

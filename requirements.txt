@@ -1,4 +1,4 @@
-docker>=4.3.1
+docker>=7.1.0
 prometheus_client>=0.25.0
 requests>=2.32.5
 influxdb>=5.3.2

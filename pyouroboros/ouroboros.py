@@ -7,7 +7,6 @@ from requests.exceptions import ConnectionError
 from datetime import datetime, timedelta
 from argparse import ArgumentParser, RawTextHelpFormatter
 from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.util import undefined
 from pytz import timezone
 
 from pyouroboros.config import Config
@@ -196,11 +195,11 @@ def main():
                 mode = Container(docker)
 
             if config.run_once:
-                next_run_time = undefined
+                run_date=datetime.now()
                 if mode.mode == 'container':
-                    scheduler.add_job(mode.self_check, id='self_check', name=_('Self Check for %s') % socket)
-                    next_run_time = None
-                scheduler.add_job(mode.update, id='update', name=_('Run Once container update for %s') % socket, next_run_time=next_run_time)
+                    scheduler.add_job(mode.self_check, name=_('Self Check for %s') % socket)
+                    run_date = run_date + timedelta(seconds=20)
+                scheduler.add_job(mode.update, name=_('Run Once container update for %s') % socket, trigger='date', run_date=run_date)
             else:
                 if mode.mode == 'container':
                     scheduler.add_job(mode.self_check, name=_('Self Check for %s') % socket)
@@ -244,17 +243,7 @@ def main():
     if not config.skip_startup_notifications:
         notification_manager.send(kind='startup', next_run=next_run)
 
-    while True:
-        jobs = scheduler.get_jobs()
-        if not jobs:
-            break
-        if config.run_once and config.self_update:
-            has_self_update = False
-            for job in jobs:
-                if job.id == 'self_check':
-                    has_self_update = True
-            if not has_self_update:
-                scheduler.resubmit_job('update')
+    while scheduler.get_jobs():
         sleep(1)
 
     scheduler.shutdown()

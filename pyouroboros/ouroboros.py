@@ -196,7 +196,7 @@ def main():
 
             if config.run_once:
                 run_date=datetime.now()
-                if mode.mode == 'container':
+                if config.self_update and mode.mode == 'container':
                     scheduler.add_job(mode.self_check, name=_('Self Check for %s') % socket)
                     run_date = run_date + timedelta(seconds=20)
                 scheduler.add_job(mode.update, name=_('Run Once container update for %s') % socket, trigger='date', run_date=run_date)

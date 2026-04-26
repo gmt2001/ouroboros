@@ -266,8 +266,11 @@ class Container(BaseImageObject):
             try:
                 if latest_image is None:
                     latest_image = self.pull(current_tag)
-            except ConnectionError:
+            except ConnectionError as e:
+                self.logger.debug("Connection error while pulling image %s: %s", current_tag, e)
                 continue
+
+            self.logger.debug('%s: current_image=%s, latest_image=%s', container.name, current_image.id, latest_image.id)
 
             try:
                 if current_image.id != latest_image.id:

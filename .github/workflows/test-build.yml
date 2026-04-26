@@ -60,7 +60,10 @@ jobs:
       run: |
         sudo mkdir -p /app/pyouroboros/hooks
         docker create --name ouroboros -v /var/run/docker.sock:/var/run/docker.sock localhost:5000/tester/ouroboros:test --run-once --self-update --log-level debug
-        docker start --attach ouroboros || true
+        set +e
+        docker start --attach ouroboros
+        set -e
+        echo "Checking initial version before update..."
         VER=$(docker container logs ouroboros 2>&1 | grep -oP 'Version: \K[^\s]+')
         echo "Expected: 0.0+test-main"
         echo "Got:      $VER"
@@ -81,7 +84,9 @@ jobs:
         tags: localhost:5000/tester/ouroboros:test
     - name: Self-Update Test with Docker
       run: |
-        docker start --attach ouroboros || true
+        set +e
+        docker start --attach ouroboros
+        set -e
         CONTAINERS=$(docker container ls --format '{{.Names}}')
         OLDEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros)
         NEWEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros-updated)
@@ -115,8 +120,10 @@ jobs:
     - name: Prepare Container Update Test with Docker
       run: |
         docker create --name testcontainer localhost:5000/tester/testcontainer:test
-        docker start --attach ouroboros || true
-        docker start --attach testcontainer || true
+        set +e
+        docker start --attach ouroboros
+        docker start --attach testcontainer
+        set -e
         OUT=$(docker container logs testcontainer 2>&1 | grep -oP '\K[^\s]+ World!')
         echo "Expected: Hello World!"
         echo "Got:      $OUT"
@@ -136,14 +143,18 @@ jobs:
         tags: localhost:5000/tester/testcontainer:test
     - name: Container Update Test with Docker
       run: |
-        docker start --attach ouroboros || true
+        set +e
+        docker start --attach ouroboros
+        set -e
         CONTAINERS=$(docker container ls --format '{{.Names}}')
         EXISTS=$(echo "$CONTAINERS" | grep -w testcontainer)
         if [ -z "$EXISTS" ]; then
           echo "Test container not found!" >&2
           exit 1
         fi
-        docker start --attach testcontainer || true
+        set +e
+        docker start --attach testcontainer
+        set -e
         OUT=$(docker container logs testcontainer 2>&1 | grep -oP '\K[^\s]+ World!')
         echo "Expected: Goodbye World!"
         echo "Got:      $OUT"

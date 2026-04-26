@@ -195,6 +195,8 @@ def main():
                 mode = Container(docker)
 
             if config.run_once:
+                if mode.mode == 'container':
+                    scheduler.add_job(mode.self_check, name=_('Self Check for %s') % socket)
                 scheduler.add_job(mode.update, name=_('Run Once container update for %s') % socket)
             else:
                 if mode.mode == 'container':

@@ -62,9 +62,8 @@ jobs:
         docker create --name ouroboros -v /var/run/docker.sock:/var/run/docker.sock localhost:5000/tester/ouroboros:test --run-once --self-update --log-level debug
         set +e
         docker start --attach ouroboros
-        set -e
-        echo "Checking initial version before update..."
         VER=$(docker container logs ouroboros 2>&1 | grep -oP 'Version: \K[^\s]+')
+        set -e
         echo "Expected: 0.0+test-main"
         echo "Got:      $VER"
         if [ "$VER" != "0.0+test-main" ]; then
@@ -87,19 +86,17 @@ jobs:
       run: |
         set +e
         docker start --attach ouroboros
-        set -e
-        echo "Checking container list after update..."
         CONTAINERS=$(docker container ls --format '{{.Names}}')
         OLDEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros)
         NEWEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros-updated)
         if [ ! -z "$NEWEXISTS" ]; then
-          set +e
           docker container attach ouroboros-updated
-          set -e
+          docker container logs ouroboros-updated
         fi
         CONTAINERS=$(docker container ls --format '{{.Names}}')
         OLDEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros)
         NEWEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros-updated)
+        set -e
         if [ ! -z "$OLDEXISTS" ]; then
           echo "Original container not removed!" >&2
           exit 1
@@ -108,8 +105,9 @@ jobs:
           echo "Updated container not found!" >&2
           exit 1
         fi
-        echo "Checking version after update..."
+        set +e
         VER=$(docker container logs ouroboros-updated 2>&1 | grep -oP 'Version: \K[^\s]+')
+        set -e
         echo "Expected: 0.1+test-main"
         echo "Got:      $VER"
         if [ "$VER" != "0.1+test-main" ]; then
@@ -135,8 +133,8 @@ jobs:
         set +e
         docker start --attach ouroboros
         docker start --attach testcontainer
-        set -e
         OUT=$(docker container logs testcontainer 2>&1 | grep -oP '\K[^\s]+ World!')
+        set -e
         echo "Expected: Hello World!"
         echo "Got:      $OUT"
         if [ "$OUT" != "Hello World!" ]; then
@@ -158,17 +156,17 @@ jobs:
       run: |
         set +e
         docker start --attach ouroboros
-        set -e
         CONTAINERS=$(docker container ls --format '{{.Names}}')
         EXISTS=$(echo "$CONTAINERS" | grep -w testcontainer)
+        set -e
         if [ -z "$EXISTS" ]; then
           echo "Test container not found!" >&2
           exit 1
         fi
         set +e
         docker start --attach testcontainer
-        set -e
         OUT=$(docker container logs testcontainer 2>&1 | grep -oP '\K[^\s]+ World!')
+        set -e
         echo "Expected: Goodbye World!"
         echo "Got:      $OUT"
         if [ "$OUT" != "Goodbye World!" ]; then

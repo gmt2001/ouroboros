@@ -92,6 +92,14 @@ jobs:
         CONTAINERS=$(docker container ls --format '{{.Names}}')
         OLDEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros)
         NEWEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros-updated)
+        if [ ! -z "$NEWEXISTS" ]; then
+          set +e
+          docker container attach ouroboros-updated
+          set -e
+        fi
+        CONTAINERS=$(docker container ls --format '{{.Names}}')
+        OLDEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros)
+        NEWEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros-updated)
         if [ ! -z "$OLDEXISTS" ]; then
           echo "Original container not removed!" >&2
           exit 1

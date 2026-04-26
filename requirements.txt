@@ -3,6 +3,6 @@ prometheus_client>=0.25.0
 requests>=2.32.5
 influxdb>=5.3.2
 apprise>=1.9.9
-apscheduler>=3.6.3
+apscheduler>=3.11.2
 Babel>=2.18.0
 pytz

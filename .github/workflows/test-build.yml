@@ -89,7 +89,7 @@ jobs:
         sleep 1
         CONTAINERS=$(docker container ls --all --format '{{.Names}}')
         echo "$CONTAINERS"
-        OLDEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros)
+        OLDEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros | grep -v ouroboros-updated)
         NEWEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros-updated)
         set -e
         if [ ! -z "$OLDEXISTS" ]; then

@@ -248,7 +248,7 @@ def main():
         jobs = scheduler.get_jobs()
         if not jobs:
             break
-        if config.run_once:
+        if config.run_once and config.self_update:
             has_self_update = False
             for job in jobs:
                 if job.id == 'self_check':

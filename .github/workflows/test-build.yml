@@ -68,7 +68,7 @@ jobs:
           echo "Version mismatch before update!" >&2
           exit 1
         fi
-        truncate -s 0 $(docker inspect --format="{{.LogPath}}" ouroboros)
+        sudo truncate -s 0 $(docker inspect --format="{{.LogPath}}" ouroboros)
         sed -i -r 's/VERSION = "0.0+test"/VERSION = "0.1+test"/' pyouroboros/__init__.py
     - name: Build Self-Update Test with Docker
       uses: docker/build-push-action@v7
@@ -125,7 +125,7 @@ jobs:
           echo "Output mismatch before update!" >&2
           exit 1
         fi
-        truncate -s 0 $(docker inspect --format="{{.LogPath}}" testcontainer)
+        sudo truncate -s 0 $(docker inspect --format="{{.LogPath}}" testcontainer)
         sed -i -r 's/Hello/Goodbye/' testfile.sh
     - name: Build Container Update Test with Docker
       uses: docker/build-push-action@v7

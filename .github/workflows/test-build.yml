@@ -81,7 +81,7 @@ jobs:
           docker container logs ouroboros-updated
         fi
         sleep 1
-        CONTAINERS=$(docker container ls --format '{{.Names}}')
+        CONTAINERS=$(docker container ls --all --format '{{.Names}}')
         echo "$CONTAINERS"
         OLDEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros)
         NEWEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros-updated)

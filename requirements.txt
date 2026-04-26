@@ -1,5 +1,5 @@
 docker>=4.3.1
-prometheus_client>=0.8.0
+prometheus_client>=0.25.0
 requests>=2.25.0
 influxdb>=5.3.2
 apprise>=0.8.9

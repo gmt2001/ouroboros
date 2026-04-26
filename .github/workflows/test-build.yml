@@ -49,7 +49,9 @@ jobs:
         sudo mkdir -p /app/pyouroboros/hooks
         docker create --name ouroboros -v /var/run/docker.sock:/var/run/docker.sock localhost:5000/tester/ouroboros:test --run-once --self-update --log-level debug
         set +e
+        echo "::GROUP::Attaching to container before update"
         docker start --attach ouroboros
+        echo "::ENDGROUP::"
         VER=$(docker container logs ouroboros 2>&1 | grep -oP 'Version: \K[^\s]+')
         set -e
         echo "Expected: 0.0+test-main"
@@ -73,12 +75,16 @@ jobs:
     - name: Self-Update Test with Docker
       run: |
         set +e
+        echo "::GROUP::Attaching to container during update"
         docker start --attach ouroboros
+        echo "::ENDGROUP::"
         if [ ! -z "$(docker container ls --format '{{.Names}}' | grep -w ouroboros-updated)" ]; then
-          echo "Attaching to updated container..."
+          echo "::GROUP::Attaching to updated container"
           docker container attach ouroboros-updated
-          echo "Updated container logs:"
+          echo "::ENDGROUP::"
+          echo "::GROUP::Updated container logs"
           docker container logs ouroboros-updated
+          echo "::ENDGROUP::"
         fi
         sleep 1
         CONTAINERS=$(docker container ls --all --format '{{.Names}}')
@@ -120,7 +126,9 @@ jobs:
       run: |
         docker create --name testcontainer localhost:5000/tester/testcontainer:test
         set +e
+        echo "::GROUP::Attaching to container before update"
         docker start --attach ouroboros
+        echo "::ENDGROUP::"
         docker start --attach testcontainer
         OUT=$(docker container logs testcontainer 2>&1 | grep -oP '\K[^\s]+ World!')
         set -e
@@ -144,8 +152,10 @@ jobs:
     - name: Container Update Test with Docker
       run: |
         set +e
+        echo "::GROUP::Attaching to container during update"
         docker start --attach ouroboros
-        CONTAINERS=$(docker container ls --format '{{.Names}}')
+        echo "::ENDGROUP::"
+        CONTAINERS=$(docker container ls --all --format '{{.Names}}')
         EXISTS=$(echo "$CONTAINERS" | grep -w testcontainer)
         set -e
         if [ -z "$EXISTS" ]; then

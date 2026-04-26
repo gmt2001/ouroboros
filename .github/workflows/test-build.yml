@@ -32,7 +32,7 @@ jobs:
       run: |
         sed -i -r 's/VERSION = "custom"/VERSION = "0.0+test"/' pyouroboros/__init__.py
         echo $?\
-    - name: Build Docker
+    - name: Build Test with Docker
       uses: docker/build-push-action@v7
       with:
         context: .
@@ -41,7 +41,7 @@ jobs:
         push: true
         cache-from: type=gha,scope=main
         tags: localhost:5000/tester/ouroboros:test
-    - name: Build Docker (main)
+    - name: Update Build Cache with Docker (main)
       if: github.ref_name == 'main'
       uses: docker/build-push-action@v7
       with:
@@ -52,7 +52,104 @@ jobs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
         tags: localhost:5000/tester/ouroboros:test
-    - name: Test with Docker
+    - name: Execution Test with Docker
       run: |
         sudo mkdir -p /app/pyouroboros/hooks
         docker run --rm --name ouroboros -v /var/run/docker.sock:/var/run/docker.sock localhost:5000/tester/ouroboros:test --run-once --dry-run --log-level debug
+    - name: Prepare Self-Update Test with Docker
+      run: |
+        sudo mkdir -p /app/pyouroboros/hooks
+        docker create --name ouroboros -v /var/run/docker.sock:/var/run/docker.sock localhost:5000/tester/ouroboros:test --run-once --self-update --log-level debug
+        docker start --attach ouroboros
+        VER=$(docker container logs ouroboros 2>&1 | grep -oP 'Version: \K[^\s]+')
+        echo "Expected: 0.0+test"
+        echo "Got:      $VER"
+        if [ "$VER" != "0.0+test" ]; then
+          echo "Version mismatch before update!" >&2
+          exit 1
+        fi
+        truncate -s 0 $(docker inspect --format="{{.LogPath}}" ouroboros)
+        sed -i -r 's/VERSION = "0.0+test"/VERSION = "0.1+test"/' pyouroboros/__init__.py
+    - name: Build Self-Update Test with Docker
+      uses: docker/build-push-action@v7
+      with:
+        context: .
+        file: ./Dockerfile
+        platforms: linux/amd64
+        push: true
+        cache-from: type=gha,scope=main
+        tags: localhost:5000/tester/ouroboros:test
+    - name: Self-Update Test with Docker
+      run: |
+        docker start --attach ouroboros
+        CONTAINERS=$(docker container ls --format '{{.Names}}')
+        OLDEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros)
+        NEWEXISTS=$(echo "$CONTAINERS" | grep -w ouroboros-updated)
+        if [ ! -z "$OLDEXISTS" ]; then
+          echo "Original container not removed!" >&2
+          exit 1
+        fi
+        if [ -z "$NEWEXISTS" ]; then
+          echo "Updated container not found!" >&2
+          exit 1
+        fi
+        VER=$(docker container logs ouroboros-updated 2>&1 | grep -oP 'Version: \K[^\s]+')
+        echo "Expected: 0.1+test"
+        echo "Got:      $VER"
+        if [ "$VER" != "0.1+test" ]; then
+          echo "Version mismatch after update!" >&2
+          exit 1
+        fi
+    - name: Prepare Container Pre-Update Test with Docker
+      run: |
+        echo "#!/user/bin/env bash\necho Hello World!" > ./testfile.sh
+        echo "FROM alpine:latest\nWORKDIR /app\nCOPY /testfile.sh /app/\nCMD /app/testfile.sh" > ./TestDockerfile
+    - name: Build Container Pre-Update Test with Docker
+      uses: docker/build-push-action@v7
+      with:
+        context: .
+        file: ./TestDockerfile
+        platforms: linux/amd64
+        push: true
+        cache-from: type=gha,scope=main
+        tags: localhost:5000/tester/testcontainer:test
+    - name: Prepare Container Update Test with Docker
+      run: |
+        docker create --name testcontainer localhost:5000/tester/testcontainer:test
+        docker start --attach ouroboros
+        docker start --attach testcontainer
+        OUT=$(docker container logs testcontainer 2>&1 | grep -oP '\K[^\s]+ World!')
+        echo "Expected: Hello World!"
+        echo "Got:      $OUT"
+        if [ "$OUT" != "Hello World!" ]; then
+          echo "Output mismatch before update!" >&2
+          exit 1
+        fi
+        truncate -s 0 $(docker inspect --format="{{.LogPath}}" testcontainer)
+        sed -i -r 's/Hello/Goodbye/' testfile.sh
+    - name: Build Container Update Test with Docker
+      uses: docker/build-push-action@v7
+      with:
+        context: .
+        file: ./TestDockerfile
+        platforms: linux/amd64
+        push: true
+        cache-from: type=gha,scope=main
+        tags: localhost:5000/tester/testcontainer:test
+    - name: Container Update Test with Docker
+      run: |
+        docker start --attach ouroboros
+        CONTAINERS=$(docker container ls --format '{{.Names}}')
+        EXISTS=$(echo "$CONTAINERS" | grep -w testcontainer)
+        if [ -z "$EXISTS" ]; then
+          echo "Test container not found!" >&2
+          exit 1
+        fi
+        docker start --attach testcontainer
+        OUT=$(docker container logs testcontainer 2>&1 | grep -oP '\K[^\s]+ World!')
+        echo "Expected: Goodbye World!"
+        echo "Got:      $OUT"
+        if [ "$OUT" != "Goodbye World!" ]; then
+          echo "Output mismatch after update!" >&2
+          exit 1
+        fi

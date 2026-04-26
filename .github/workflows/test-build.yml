@@ -112,7 +112,7 @@ jobs:
     - name: Prepare Container Pre-Update Test with Docker
       run: |
         echo -e "#!/user/bin/env bash\necho Hello World!" > ./testfile.sh
-        echo -e "FROM alpine:latest\nWORKDIR /app\nCOPY /testfile.sh /app/\nCMD /app/testfile.sh" > ./TestDockerfile
+        echo -e "FROM alpine:latest\nWORKDIR /app\nCOPY /testfile.sh /app/\nRUN chmod +x /app/testfile.sh\nCMD /app/testfile.sh" > ./TestDockerfile
     - name: Build Container Pre-Update Test with Docker
       uses: docker/build-push-action@v7
       with:
@@ -127,7 +127,7 @@ jobs:
         docker create --name testcontainer localhost:5000/tester/testcontainer:test
         set +e
         echo "::GROUP::Attaching to container before update"
-        docker start --attach ouroboros
+        docker start --attach ouroboros-updated
         echo "::ENDGROUP::"
         docker start --attach testcontainer
         OUT=$(docker container logs testcontainer 2>&1 | grep -oP '\K[^\s]+ World!')
@@ -153,7 +153,7 @@ jobs:
       run: |
         set +e
         echo "::GROUP::Attaching to container during update"
-        docker start --attach ouroboros
+        docker start --attach ouroboros-updated
         echo "::ENDGROUP::"
         CONTAINERS=$(docker container ls --all --format '{{.Names}}')
         EXISTS=$(echo "$CONTAINERS" | grep -w testcontainer)

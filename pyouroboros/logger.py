@@ -17,9 +17,9 @@ class BlacklistFilter(Filter):
         for item in self.filtered_strings:
             try:
                 if item in record.msg:
-                    record.msg = record.msg.replace(item, 8 * '*' + item[-5:])
+                    record.msg = record.msg.replace(item, 8 * '*' + (item[-5:] if len(item) > 10 else ''))
                 if any(item in str(arg) for arg in record.args):
-                    record.args = tuple(arg.replace(item, 8 * '*' + item[-5:]) if isinstance(arg, str) else arg
+                    record.args = tuple(arg.replace(item, 8 * '*' + (item[-5:] if len(item) > 10 else '')) if isinstance(arg, str) else arg
                                         for arg in record.args)
             except TypeError:
                 pass

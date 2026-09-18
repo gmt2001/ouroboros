@@ -22,7 +22,9 @@ COPY /pyouroboros /app/pyouroboros
 
 RUN pip install --no-cache-dir .
 
-RUN mkdir /app/pyouroboros/hooks
+RUN mkdir /app/pyouroboros/hooks \
+    && cd /usr/local/lib/python*/site-packages/pyouroboros/ \
+    && ln -s /app/pyouroboros/hooks ./hooks
 
 VOLUME /app/pyouroboros/hooks
 

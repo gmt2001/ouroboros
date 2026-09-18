@@ -349,7 +349,7 @@ class Container(BaseImageObject):
                     mylocals['latest_image'] = latest_image
                     run_hook('notify_update', None, mylocals)
                     self.notification_manager.send(
-                        container_tuples=[(container.name, current_image, latest_image)],
+                        container_tuples=[(container, current_image, latest_image)],
                         socket=self.socket,
                         kind='monitor'
                     )

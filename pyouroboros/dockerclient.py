@@ -330,12 +330,12 @@ class Container(BaseImageObject):
             if self.config.dry_run:
                 try:
                     repo_digest_id = current_image.attrs['RepoDigests'][0].split('@')[1]
+                except:
+                    try:
+                        repo_digest_id = current_image.id
                     except:
-                        try:
-                            repo_digest_id = current_image.id
-                        except:
-                            self.logger.error("Could not get repo digest for %s. Skipping...", container.name)
-                            continue
+                        self.logger.error("Could not get repo digest for %s. Skipping...", container.name)
+                        continue
                 if repo_digest_id != latest_image.id:
                     mylocals = {}
                     mylocals['container'] = container
@@ -348,12 +348,12 @@ class Container(BaseImageObject):
             if self.config.monitor_only:
                 try:
                     repo_digest_id = current_image.attrs['RepoDigests'][0].split('@')[1]
+                except:
+                    try:
+                        repo_digest_id = current_image.id
                     except:
-                        try:
-                            repo_digest_id = current_image.id
-                        except:
-                            self.logger.error("Could not get repo digest for %s. Skipping...", container.name)
-                            continue
+                        self.logger.error("Could not get repo digest for %s. Skipping...", container.name)
+                        continue
                 if repo_digest_id != latest_image.id:
                     mylocals = {}
                     mylocals['container'] = container

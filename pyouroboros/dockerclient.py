@@ -328,8 +328,14 @@ class Container(BaseImageObject):
 
         for container, current_image, latest_image in updateable:
             if self.config.dry_run:
-                # Ugly hack for repo digest
-                repo_digest_id = current_image.attrs['RepoDigests'][0].split('@')[1]
+                try:
+                    repo_digest_id = current_image.attrs['RepoDigests'][0].split('@')[1]
+                    except:
+                        try:
+                            repo_digest_id = current_image.id
+                        except:
+                            self.logger.error("Could not get repo digest for %s. Skipping...", container.name)
+                            continue
                 if repo_digest_id != latest_image.id:
                     mylocals = {}
                     mylocals['container'] = container
@@ -340,8 +346,14 @@ class Container(BaseImageObject):
                 continue
 
             if self.config.monitor_only:
-                # Ugly hack for repo digest
-                repo_digest_id = current_image.attrs['RepoDigests'][0].split('@')[1]
+                try:
+                    repo_digest_id = current_image.attrs['RepoDigests'][0].split('@')[1]
+                    except:
+                        try:
+                            repo_digest_id = current_image.id
+                        except:
+                            self.logger.error("Could not get repo digest for %s. Skipping...", container.name)
+                            continue
                 if repo_digest_id != latest_image.id:
                     mylocals = {}
                     mylocals['container'] = container
